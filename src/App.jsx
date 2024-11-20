@@ -1,30 +1,45 @@
-import React from "react";
 import { Routes, Route } from "react-router-dom";
-
-// import pages
+import IsPrivate from "./components/IsPrivate"; // Ensure the correct path
 import ExplorePage from "./pages/ExplorePage";
 import SpotDetailsPage from "./pages/SpotDetailsPage";
-import FavoritesPage from "./pages/FavoritesPage";
 import BookingsPage from "./pages/BookingsPage";
-import ProfilePage from "./pages/ProfilePage";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
 import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
-    <>
+    <div>
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<ExplorePage />} />
-        <Route path="/spots/:id" element={<SpotDetailsPage />} />{" "}
-        <Route path="/favorites" element={<FavoritesPage />} />
-        <Route path="/bookings" element={<BookingsPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/spots/:id" element={<SpotDetailsPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
+        {/* Private Routes */}
+        <Route
+          path="/bookings"
+          element={
+            <IsPrivate>
+              <BookingsPage />
+            </IsPrivate>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <IsPrivate>
+              <Profile />
+            </IsPrivate>
+          }
+        />
+
+        {/* Catch-all for undefined routes */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </>
+    </div>
   );
 }
 
