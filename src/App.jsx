@@ -1,11 +1,13 @@
 import { Routes, Route } from "react-router-dom";
-import IsPrivate from "./components/IsPrivate"; // Ensure the correct path
+import IsPrivate from "./components/IsPrivate";
 import ExplorePage from "./pages/ExplorePage";
 import SpotDetailsPage from "./pages/SpotDetailsPage";
 import BookingsPage from "./pages/BookingsPage";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import Profile from "./pages/Profile";
+import FavoritesPage from "./pages/FavoritesPage";
+
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
@@ -15,8 +17,8 @@ function App() {
         {/* Public Routes */}
         <Route path="/" element={<ExplorePage />} />
         <Route path="/spots/:id" element={<SpotDetailsPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
 
         {/* Private Routes */}
         <Route
@@ -31,7 +33,15 @@ function App() {
           path="/profile"
           element={
             <IsPrivate>
-              <Profile />
+              <ProfilePage />
+            </IsPrivate>
+          }
+        />
+        <Route
+          path="/favorites"
+          element={
+            <IsPrivate>
+              <FavoritesPage />
             </IsPrivate>
           }
         />
