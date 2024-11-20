@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import SpotCard from "../components/SpotCard";
+
+import SpotCard from "../components/SpotCard/SpotCard";
+import "./explorepage.css"
 
 function ExplorePage() {
   const [spots, setSpots] = useState([]);
@@ -14,9 +16,9 @@ function ExplorePage() {
   }, []);
 
   return (
-    <div>
-      <h1>Explore spots</h1>
-      <div>
+    <div className="explorepage">
+      <h2>Explore spots</h2>
+      <div className="spotslist">
         {spots.map((spot) => (
           <SpotCard key={spot._id} spot={spot} />
         ))}

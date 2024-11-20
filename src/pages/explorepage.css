@@ -1,0 +1,17 @@
+.explorepage {
+    margin: 2em;
+    display: flex; 
+    flex-direction: column;
+}
+
+.spotslist {
+    display: flex; 
+    flex-direction: row;
+}
+
+@media (max-width: 767px) {
+    .spotslist{
+        flex-direction: column;
+        padding: 0;
+    }
+}

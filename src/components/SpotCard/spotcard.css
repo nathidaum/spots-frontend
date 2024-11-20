@@ -1,0 +1,134 @@
+.spotcard {
+  margin-bottom: 2em;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 20vw;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 30vh;
+  overflow: hidden;
+}
+
+.image-container img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-container {
+  position: relative;
+  border-radius: 1em; 
+  overflow: hidden; 
+}
+
+/* Custom controls */
+.mantine-Carousel-control {
+  background-color: rgba(255, 255, 255, 0.4);
+  color: black;
+  border-radius: 50%;
+  border: 0px solid transparent;
+  width: 1.8em;
+  height: 1.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mantine-Carousel-control:hover {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.mantine-Carousel-control[data-inactive] {
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+/* Custom indicators */
+.mantine-Carousel-indicator {
+  width: 0.5em;
+  height: 0.5em; 
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.mantine-Carousel-indicator:hover {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.mantine-Carousel-indicator[data-active] {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+
+.carousel-image img {
+  border-radius: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.hear-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  background-color: transparent;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.hear-icon:hover {
+  transform: scale(1.1);
+  background-color: transparent;
+}
+
+.spotinfo {
+  margin-top: 0.6em;
+}
+
+.spotinfo p {
+  margin: 0.3em 0;
+  font-size: 0.9em;
+  line-height: 1.2;
+}
+
+.title {
+  font-weight: 600;
+}
+
+.location {
+  font-weight: 400;
+}
+
+.price {
+  font-weight: 500;
+}
+
+@media (max-width: 767px) {
+  .spotcard {
+    padding: 0em;
+    max-width: 100vw;
+  }
+}

@@ -29,9 +29,6 @@ function SpotDetailsPage() {
       <div>
         <Link to="/">Back</Link>
       </div>
-      <div>
-        <img src={spot.images[0]} alt={spot.title} />
-      </div>
       <h1>{spot.title}</h1>
       <p>
         Location: {spot.location.city}, {spot.location.address}
