@@ -8,13 +8,13 @@ class AuthService {
 
     // Automatically set JWT token in the headers for every request
     this.api.interceptors.request.use((config) => {
-        const storedToken = localStorage.getItem("authToken");
-        if (storedToken) {
-          config.headers = { Authorization: `Bearer ${storedToken}` };
-          console.log("Authorization Header:", req.headers.authorization);
-        }
-        return config;
-      });      
+      const storedToken = localStorage.getItem("authToken");
+      if (storedToken) {
+        config.headers = { Authorization: `Bearer ${storedToken}` };
+        console.log("Authorization Header:", config.headers.Authorization);
+      }
+      return config;
+    });
   }
 
   register = (requestBody) => {

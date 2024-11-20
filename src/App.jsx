@@ -18,7 +18,7 @@ function App() {
         <Route path="/" element={<ExplorePage />} />
         <Route path="/spots/:id" element={<SpotDetailsPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/register" element={<SignupPage />} />
 
         {/* Private Routes */}
         <Route
