@@ -28,6 +28,13 @@ class AuthService {
   verify = () => {
     return this.api.get("/users/verify");
   };
+  deleteAccount = () => {
+    return this.api.delete("/users/delete", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    });
+  };
 }
 
 // Create one instance (object) of the service
