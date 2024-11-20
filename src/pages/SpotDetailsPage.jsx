@@ -38,9 +38,9 @@ function SpotDetailsPage() {
       </p>
       <p>{spot.description}</p>
 
-      {spot.amenities.map((amenity) => {
+      {spot.amenities.map((amenity, index) => {
         return (
-          <div>
+          <div key={index}> {/* Added a unique key */}
             <p>{amenity}</p>
           </div>
         );
