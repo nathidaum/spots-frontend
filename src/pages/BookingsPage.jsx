@@ -1,21 +1,20 @@
 import { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
+import BookingCard from "../components/BookingCard/BookingCard";
 import { AuthContext } from "../context/auth.context";
+import "./explorepage.css"
 
 function BookingsPage() {
   const [bookings, setBookings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { user } = useContext(AuthContext); // Get user info from context
 
   useEffect(() => {
-    // Fetch bookings for the logged-in user
     axios
       .get("http://localhost:3000/bookings", {
         headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
       })
       .then((response) => {
-        setBookings(response.data.bookings);
+        setBookings(response.data.bookings || []);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -32,25 +31,14 @@ function BookingsPage() {
 
   return (
     <div>
-      <h1>Your Bookings</h1>
-      <div>
-        {bookings.map((booking) => (
-          <Link key={booking._id} to={`/bookings/${booking._id}`}>
-            <div>
-              <h2>{booking.spotId.title}</h2>
-              <p>
-                Location: {booking.spotId.location.city},{" "}
-                {booking.spotId.location.address}
-              </p>
-              <p>Price: {booking.spotId.price} €/day</p>
-              <p>
-                Dates: {new Date(booking.startDate).toLocaleDateString()} -{" "}
-                {new Date(booking.endDate).toLocaleDateString()}
-              </p>
-              <p>Booked at: {new Date(booking.bookedAt).toLocaleDateString()}</p>
-            </div>
-          </Link>
-        ))}
+      <div className="explorepage">
+        <div className="gallery-container">
+          <div className="spotslist">
+            {bookings.map((booking) => (
+              <BookingCard key={booking._id} booking={booking} />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
