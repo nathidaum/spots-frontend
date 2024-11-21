@@ -1,0 +1,74 @@
+.desktop-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em 2em;
+  background-color: #ffffff;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 1.5em;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+
+.profile-menu {
+  display: flex;
+  align-items: center;
+}
+
+.profile-menu .mantine-Menu-dropdown {
+  min-width: 150px;
+}
+
+.mobile-navbar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-around;
+  padding: 0.5em 0;
+  z-index: 1000;
+}
+
+.nav-item {
+  text-align: center;
+  font-size: 0.9em;
+  text-decoration: none;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav-item span {
+  margin-top: 0.3em;
+  font-size: 0.8em;
+}
+
+.nav-item:hover {
+  color: #ffa600;
+}
+
+.mobile-navbar {
+  display: none
+}
+
+/* Show the mobile navbar on smaller screens */
+@media (max-width: 768px) {
+  .desktop-navbar {
+    display: none;
+  }
+
+  .mobile-navbar {
+    display: flex;
+  }
+}

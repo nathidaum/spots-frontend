@@ -9,10 +9,12 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
+import Navbar from "./components/Navbar/Navbar";
 
 function App() {
   return (
     <div>
+      <Navbar/>
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<ExplorePage />} />
