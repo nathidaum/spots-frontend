@@ -1,0 +1,12 @@
+.favoritespage {
+  margin: 7em 2em 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+  @media (max-width: 767px) {
+    .favoritespage {
+      margin: 2em 1em 6em;
+    }
+  }

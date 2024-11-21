@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
+import SpotCard from "../components/SpotCard/SpotCard";
+import "./explorepage.css";
+import "./favoritespage.css";
 
 function FavoritesPage() {
   const [favorites, setFavorites] = useState([]);
@@ -9,7 +11,9 @@ function FavoritesPage() {
   useEffect(() => {
     axios
       .get("http://localhost:3000/users/favorites", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
       })
       .then((response) => {
         setFavorites(response.data.favorites || []);
@@ -20,6 +24,10 @@ function FavoritesPage() {
       });
   }, []);
 
+  const handleFavoriteToggle = (spotId) => {
+    setFavorites((prev) => prev.filter((spot) => spot._id !== spotId)); // Remove spot from local state
+  };
+
   if (error) {
     return <p>{error}</p>;
   }
@@ -29,19 +37,18 @@ function FavoritesPage() {
   }
 
   return (
-    <div>
-      <h1>Your favorite spots</h1>
-      <div>
-        {favorites.map((spot) => (
-          <Link key={spot._id} to={`/spots/${spot._id}`}>
-            <div>
-              <img src={spot.images[0]} alt={spot.title} />
-              <h2>{spot.title}</h2>
-              <p>{spot.location.city}</p>
-              <p>{spot.price} €/day</p>
-            </div>
-          </Link>
-        ))}
+    <div className="favoritespage">
+      <div className="gallery-container">
+        <div className="spotslist">
+          {favorites.map((spot) => (
+            <SpotCard
+              key={spot._id}
+              spot={spot}
+              isFavorite={true}
+              onFavoriteToggle={handleFavoriteToggle}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

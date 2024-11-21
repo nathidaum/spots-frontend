@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "@mantine/carousel/styles.css";
 import { Carousel } from "@mantine/carousel";
@@ -6,13 +6,32 @@ import { Image, ActionIcon } from "@mantine/core";
 import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
 
 import "./spotcard.css";
+import authService from "../../services/auth.service";
 
-const SpotCard = ({ spot }) => {
-  const [liked, setLiked] = useState(false);
+const SpotCard = ({ spot, isFavorite, onFavoriteToggle }) => {
+  // Inside SpotCard component
+  const [liked, setLiked] = useState(isFavorite); // Initial favorite state
+
+  // Add an effect to update `liked` when `isFavorite` changes
+  useEffect(() => {
+    setLiked(isFavorite);
+  }, [isFavorite]);
 
   const handleLikeToggle = (e) => {
-    e.stopPropagation(); // Prevent Link navigation
-    setLiked((prev) => !prev);
+    e.stopPropagation(); // Prevent navigation
+
+    if (!localStorage.getItem("authToken")) {
+      console.warn("You must be logged in to favorite a spot.");
+      return;
+    }
+
+    authService
+      .toggleFavorite(spot._id)
+      .then(() => {
+        setLiked((prev) => !prev);
+        if (onFavoriteToggle) onFavoriteToggle(spot._id); // Notify parent
+      })
+      .catch((error) => console.error("Error toggling favorite:", error));
   };
 
   const slides = spot.images.map((url, index) => (
@@ -39,7 +58,12 @@ const SpotCard = ({ spot }) => {
           {slides}
         </Carousel>
         {/* Fixed position action icon */}
-        <ActionIcon size="lg" className="hear-icon" onClick={handleLikeToggle}>
+        <ActionIcon
+          size="lg"
+          className="hear-icon"
+          onClick={handleLikeToggle}
+          aria-label="Toggle favorite"
+        >
           {liked ? <IconHeartFilled color="white" /> : <IconHeart />}
         </ActionIcon>
       </div>

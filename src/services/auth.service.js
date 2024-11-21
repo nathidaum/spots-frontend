@@ -10,8 +10,7 @@ class AuthService {
     this.api.interceptors.request.use((config) => {
       const storedToken = localStorage.getItem("authToken");
       if (storedToken) {
-        config.headers = { Authorization: `Bearer ${storedToken}` };
-        console.log("Authorization Header:", config.headers.Authorization);
+        config.headers.Authorization = `Bearer ${storedToken}`;
       }
       return config;
     });
@@ -28,12 +27,17 @@ class AuthService {
   verify = () => {
     return this.api.get("/users/verify");
   };
+
   deleteAccount = () => {
     return this.api.delete("/users/delete", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("authToken")}`,
       },
     });
+  };
+
+  toggleFavorite = (spotId) => {
+    return this.api.post("/users/favorites", { spotId });
   };
 }
 
