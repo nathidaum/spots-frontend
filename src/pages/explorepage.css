@@ -1,5 +1,5 @@
 .explorepage {
-  margin: 2em;
+  margin: 7em 2em 2em;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -35,7 +35,7 @@
 
 @media (max-width: 767px) {
   .explorepage {
-    margin: 1em;
+    margin: 2em 1em 6em;
   }
 
   .gallery-container {

@@ -17,7 +17,6 @@ function ExplorePage() {
 
   return (
     <div className="explorepage">
-      <h2>Explore spots</h2>
       <div className="gallery-container">
         <div className="spotslist">
           {spots.map((spot) => (
