@@ -1,6 +1,5 @@
 .spotcard {
   margin-bottom: 2em;
-  padding: 1em;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -80,7 +79,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
@@ -128,7 +127,7 @@
 
 @media (max-width: 767px) {
   .spotcard {
-    padding: 0em;
     max-width: 100vw;
+    margin-bottom: 0em;
   }
 }

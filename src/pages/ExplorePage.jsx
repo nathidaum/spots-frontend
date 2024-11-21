@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 import SpotCard from "../components/SpotCard/SpotCard";
-import "./explorepage.css"
+import "./explorepage.css";
 
 function ExplorePage() {
   const [spots, setSpots] = useState([]);
@@ -18,10 +18,12 @@ function ExplorePage() {
   return (
     <div className="explorepage">
       <h2>Explore spots</h2>
-      <div className="spotslist">
-        {spots.map((spot) => (
-          <SpotCard key={spot._id} spot={spot} />
-        ))}
+      <div className="gallery-container">
+        <div className="spotslist">
+          {spots.map((spot) => (
+            <SpotCard key={spot._id} spot={spot} />
+          ))}
+        </div>
       </div>
     </div>
   );
