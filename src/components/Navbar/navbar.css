@@ -62,13 +62,13 @@
   display: none
 }
 
-/* Show the mobile navbar on smaller screens */
 @media (max-width: 768px) {
   .desktop-navbar {
-    display: none;
+    display: none; /* Hide desktop navbar */
   }
 
   .mobile-navbar {
-    display: flex;
+    display: flex; /* Show mobile navbar */
+    position: fixed; /* Ensure fixed positioning */
   }
 }
