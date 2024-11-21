@@ -14,13 +14,14 @@ import Navbar from "./components/Navbar/Navbar";
 function App() {
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<ExplorePage />} />
         <Route path="/spots/:id" element={<SpotDetailsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<SignupPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
 
         {/* Private Routes */}
         <Route
@@ -28,14 +29,6 @@ function App() {
           element={
             <IsPrivate>
               <BookingsPage />
-            </IsPrivate>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <IsPrivate>
-              <ProfilePage />
             </IsPrivate>
           }
         />
