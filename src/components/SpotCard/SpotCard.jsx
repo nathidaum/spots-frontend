@@ -60,7 +60,7 @@ const SpotCard = ({ spot, isFavorite, onFavoriteToggle }) => {
         {/* Fixed position action icon */}
         <ActionIcon
           size="lg"
-          className="hear-icon"
+          className="heart-icon"
           onClick={handleLikeToggle}
           aria-label="Toggle favorite"
         >
