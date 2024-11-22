@@ -9,10 +9,11 @@ import {
   List,
   ThemeIcon,
   Skeleton,
-  Flex
+  Flex,
+  ActionIcon,
 } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
-import { IconArrowBack, IconCheck } from "@tabler/icons-react";
+import { IconArrowLeft, IconCheck } from "@tabler/icons-react";
 import "./spotdetailspage.css";
 import "../components/SpotCard/spotcard.css";
 
@@ -45,44 +46,44 @@ function SpotDetailsPage() {
 
   return (
     <div className="detailspage">
-      <Container my="md">
-        {/* Back Button */}
-        <Button
+      {/* Images Section */}
+      <div>
+        <Carousel withIndicators loop height="30vh" withControls={false}>
+          {spot.images.map((image, index) => (
+            <Carousel.Slide key={index}>
+              <div className="image-container">
+                <img
+                  src={image}
+                  alt={`Spot image ${index + 1}`}
+                  className="carousel-image"
+                />
+                <div className="image-overlay"></div>
+              </div>
+            </Carousel.Slide>
+          ))}
+        </Carousel>
+
+        {/* Mobile back icon */}
+        <ActionIcon
+          size="md"
+          m={10}
+          className="arrowback-icon"
+          c="yellow"
           component={Link}
           to="/"
-          leftIcon={<IconArrowBack />}
-          variant="subtle"
-          color="yellow"
-          mb="lg"
         >
-          Back
-        </Button>
+          <IconArrowLeft color="black" />
+        </ActionIcon>
+      </div>
 
-        {/* Images Section */}
-        <div className="carousel-container">
-          <Carousel withIndicators loop controlSize={24} height="30vh">
-            {spot.images.map((image, index) => (
-              <Carousel.Slide key={index}>
-                <div className="image-container">
-                  <img
-                    src={image}
-                    alt={`Spot image ${index + 1}`}
-                    className="carousel-image"
-                  />
-                  <div className="image-overlay"></div>
-                </div>
-              </Carousel.Slide>
-            ))}
-          </Carousel>
-        </div>
-
+      <section className="detailed-content">
         {/* Content Section */}
-        <Flex direction="column" mt="xl">
+        <Flex direction="column" mt="md">
           {/* Title and Location */}
           <div>
             <Title order={1}>{spot.title}</Title>
-            <Text size="sm" color="dimmed" mt="sm">
-              Location: {spot.location.city}, {spot.location.address}
+            <Text size="sm" c="dimmed" mt="sm">
+              📍 {spot.location.city}, {spot.location.address}
             </Text>
           </div>
 
@@ -120,23 +121,23 @@ function SpotDetailsPage() {
             )}
           </div>
         </Flex>
+      </section>
 
-        {/* Sticky Footer for Mobile */}
-        <div className="sticky-footer">
-          <div className="price-info">
-            <Text fw={600} size="lg">
-              €{spot.price} / day
-            </Text>
-          </div>
-          <Button
-            color="yellow"
-            size="lg"
-            onClick={() => console.log("Booking initiated!")}
-          >
-            Book
-          </Button>
+      {/* Sticky Footer for Mobile */}
+      <div className="sticky-footer">
+        <div className="price-info">
+          <Text fw={600} size="lg">
+            €{spot.price} / day
+          </Text>
         </div>
-      </Container>
+        <Button
+          color="yellow"
+          size="lg"
+          onClick={() => console.log("Booking initiated!")}
+        >
+          Book
+        </Button>
+      </div>
     </div>
   );
 }
