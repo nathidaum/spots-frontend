@@ -32,6 +32,7 @@ function BookingsPage() {
   return (
     <div>
       <div className="explorepage">
+        <h1 className="mobile-title">Booked spots</h1>
         <div className="gallery-container">
           <div className="spotslist">
             {bookings.map((booking) => (

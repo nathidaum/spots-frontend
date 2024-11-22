@@ -38,6 +38,7 @@ function FavoritesPage() {
 
   return (
     <div className="favoritespage">
+      <h1 className="mobile-title">Your sweet spots</h1>
       <div className="gallery-container">
         <div className="spotslist">
           {favorites.map((spot) => (

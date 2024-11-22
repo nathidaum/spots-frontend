@@ -31,6 +31,7 @@ function ExplorePage() {
 
   return (
     <div className="explorepage">
+      <h1 className="mobile-title">Discover new spots</h1>
       <div className="gallery-container">
         <div className="spotslist">
           {spots.map((spot) => (
