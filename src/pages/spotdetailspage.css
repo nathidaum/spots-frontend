@@ -1,0 +1,37 @@
+.detailspage {
+  margin: 6em 2em 6em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sticky-footer {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sticky-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    padding: 1em;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Ensure it overlays other elements */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .sticky-footer .price-info {
+    display: flex;
+    align-items: space-between;
+    gap: 2em;
+  }
+  .detailspage {
+    margin: 0em 0.5em 6em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}

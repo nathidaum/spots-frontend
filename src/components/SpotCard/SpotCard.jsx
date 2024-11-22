@@ -64,7 +64,7 @@ const SpotCard = ({ spot, isFavorite, onFavoriteToggle }) => {
           onClick={handleLikeToggle}
           aria-label="Toggle favorite"
         >
-          {liked ? <IconHeartFilled color="white" /> : <IconHeart />}
+          {liked ? <IconHeartFilled color="orange" /> : <IconHeart />}
         </ActionIcon>
       </div>
 
