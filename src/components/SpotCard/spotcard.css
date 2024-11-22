@@ -1,4 +1,4 @@
-.spotcard {
+.card {
   margin-bottom: 2em;
   display: flex;
   flex-direction: column;
@@ -126,7 +126,7 @@
 }
 
 @media (max-width: 767px) {
-  .spotcard {
+  .card {
     max-width: 100vw;
     margin-bottom: 0em;
   }

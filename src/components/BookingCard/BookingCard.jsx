@@ -19,7 +19,7 @@ const BookingCard = ({ booking }) => {
   ));
 
   return (
-    <div className="spotcard">
+    <div className="card">
       <div className="carousel-container">
         <Carousel withIndicators loop controlSize={24}>
           {slides}

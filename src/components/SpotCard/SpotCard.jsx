@@ -45,8 +45,7 @@ const SpotCard = ({ spot, isFavorite, onFavoriteToggle }) => {
   ));
 
   return (
-    <div className="spotcard">
-      {/* Carousel container */}
+    <div className="card">
       <div className="carousel-container">
         <Carousel
           withIndicators
