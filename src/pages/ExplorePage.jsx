@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
 import { Container, Skeleton, Title } from "@mantine/core";
 import SpotCard from "../components/SpotCard/SpotCard";
 import "./explorepage.css";
@@ -9,6 +8,21 @@ function ExplorePage() {
   const [spots, setSpots] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
+
+  useEffect(() => {
+    // Update isMobile on window resize
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 767);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup event listener
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     // Fetch spots from the backend
@@ -44,7 +58,7 @@ function ExplorePage() {
       </Title>
 
       {/* Skeleton directly below the title */}
-      {isLoading && (
+      {isLoading && isMobile && (
         <div>
           {Array.from({ length: 4 }).map((_, index) => (
             <Container key={index} px={0} style={{ margin: 0 }}>

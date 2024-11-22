@@ -46,10 +46,17 @@ function BookingsPage() {
         </Title>
 
         {/* Skeleton directly below the title */}
-        {isLoading && isMobile && (
+        {isLoading && (
           <div>
             {Array.from({ length: 4 }).map((_, index) => (
-              <Container key={index} px={0} style={{ margin: 0 }}>
+              <Container
+                key={index}
+                px={0}
+                style={{
+                  margin: 0,
+                  display: isMobile ? "block" : "none", // Show skeletons only on mobile
+                }}
+              >
                 <Skeleton
                   height={240}
                   radius="lg"
