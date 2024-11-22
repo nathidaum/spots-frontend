@@ -46,6 +46,10 @@
   color: #333;
 }
 
+.logo:hover {
+  color: orange
+}
+
 .mobile-navbar {
   display: none;
   position: fixed;

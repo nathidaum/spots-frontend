@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/auth.context";
-import { Menu, Avatar, Group } from "@mantine/core";
+import { Menu, Avatar } from "@mantine/core";
 import {
   IconSettings,
   IconLogout,
