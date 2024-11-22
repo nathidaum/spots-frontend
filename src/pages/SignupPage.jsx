@@ -1,14 +1,17 @@
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import authService from "../services/auth.service";
+import { TextInput, PasswordInput, Button, Text, Anchor } from "@mantine/core";
+
 import { AuthContext } from "../context/auth.context";
+import authService from "../services/auth.service";
+import "./signuppage.css";
 
 function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [company, setCompany] = useState(""); 
+  const [company, setCompany] = useState("");
   const [errorMessage, setErrorMessage] = useState(undefined);
 
   const { storeToken, authenticateUser } = useContext(AuthContext);
@@ -51,52 +54,66 @@ function SignupPage() {
   };
 
   return (
-    <div className="SignupPage">
-      <h1>Sign Up</h1>
+    <div className="signuppage">
+      <h1>Sign up to spots. 🫰</h1>
 
       <form onSubmit={handleSignupSubmit}>
-        <label>Email:</label>
-        <input type="email" name="email" value={email} onChange={handleEmail} />
+        <TextInput
+          label="Email"
+          placeholder="nathi@gmail.com"
+          type="email"
+          value={email}
+          onChange={handleEmail}
+          required
+        />
+        <br></br>
 
-        <label>Password:</label>
-        <input
-          type="password"
-          name="password"
+        <PasswordInput
+          label="Password"
+          placeholder="StrongPassword123!"
           value={password}
           onChange={handlePassword}
+          required
         />
-
-        <label>First Name:</label>
-        <input
+        <br></br>
+        <TextInput
+          label="First Name"
+          placeholder="Nathi"
           type="text"
-          name="firstName"
           value={firstName}
           onChange={handleFirstName}
+          required
         />
-
-        <label>Last Name:</label>
-        <input
+        <br></br>
+        <TextInput
+          label="Last Name"
+          placeholder="Daum"
           type="text"
-          name="lastName"
           value={lastName}
           onChange={handleLastName}
+          required
         />
-
-        <label>Company:</label>
-        <input
+        <br></br>
+        <TextInput
+          label="Company"
+          placeholder="Nathi Corp."
           type="text"
-          name="company"
           value={company}
           onChange={handleCompany}
+          required
         />
-
-        <button type="submit">Sign Up</button>
+        {errorMessage && <Text c="red">{errorMessage}</Text>}
+        <Button type="submit" color="yellow" fullWidth mt="md">
+          Sign up
+        </Button>
       </form>
 
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
-
-      <p>Already have an account?</p>
-      <Link to={"/login"}> Login</Link>
+      <Text align="center" mt="md">
+        Already have an account?{" "}
+        <Anchor component={Link} to="/login" c="yellow">
+          Login
+        </Anchor>
+      </Text>
     </div>
   );
 }
