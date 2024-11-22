@@ -28,8 +28,11 @@ const Navbar = () => {
           spots.
         </Link>
 
+        
         <div className="navbar-right">
           {/* Navigation links */}
+          
+          {isLoggedIn && (
           <div className="navbar-links">
             <Link
               to="/favorites"
@@ -44,6 +47,7 @@ const Navbar = () => {
               Bookings
             </Link>
           </div>
+        )}
 
           {/* Profile menu */}
           <div className="profile-menu">
@@ -88,11 +92,7 @@ const Navbar = () => {
                   </div>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Item
-                    component={Link}
-                    to="/login"
-                    icon={<IconLogin />}
-                  >
+                  <Menu.Item component={Link} to="/login" icon={<IconLogin />}>
                     Login
                   </Menu.Item>
                   <Menu.Item
