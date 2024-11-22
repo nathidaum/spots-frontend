@@ -26,6 +26,10 @@
   flex-basis: calc(25% - 1.5em); /* Ensure consistent size */
 }
 
+.mobile-skeleton {
+  display: none;
+}
+
 @media (min-width: 768px) and (max-width: 1024px) {
   .spotslist > * {
     max-width: calc(33.33% - 1em); /* Three spots per row */
@@ -35,7 +39,7 @@
 
 @media (max-width: 767px) {
   .explorepage {
-    margin: 1em 1em 6em;
+    margin: 2em 1em 6em;
   }
 
   .gallery-container {
@@ -49,5 +53,8 @@
   .spotslist > * {
     max-width: 100%;
     flex-basis: 100%;
+  }
+  .mobile-skeleton {
+    display: block;
   }
 }

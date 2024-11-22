@@ -1,12 +1,27 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import BookingCard from "../components/BookingCard/BookingCard";
-import { AuthContext } from "../context/auth.context";
-import "./explorepage.css"
+import { Container, Skeleton, Title } from "@mantine/core";
+import "./explorepage.css";
 
 function BookingsPage() {
   const [bookings, setBookings] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
+
+  useEffect(() => {
+    // Update isMobile on window resize
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 767);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup event listener
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     axios
@@ -23,23 +38,68 @@ function BookingsPage() {
       });
   }, []);
 
-  if (isLoading) return <p>Loading your bookings...</p>;
-
-  if (!bookings.length) {
-    return <p>You currently have no bookings.</p>;
-  }
-
   return (
     <div>
       <div className="explorepage">
-        <h1 className="mobile-title">Booked spots</h1>
-        <div className="gallery-container">
-          <div className="spotslist">
-            {bookings.map((booking) => (
-              <BookingCard key={booking._id} booking={booking} />
+        <Title order={1} className="mobile-title" mb="lg">
+          Booked spots
+        </Title>
+
+        {/* Skeleton directly below the title */}
+        {isLoading && isMobile && (
+          <div>
+            {Array.from({ length: 4 }).map((_, index) => (
+              <Container key={index} px={0} style={{ margin: 0 }}>
+                <Skeleton
+                  height={240}
+                  radius="lg"
+                  mb="lg"
+                  style={{
+                    width: "100%",
+                  }}
+                />
+                <Skeleton
+                  height={15}
+                  radius="md"
+                  mb="sm"
+                  style={{
+                    width: "80%",
+                  }}
+                />
+                <Skeleton
+                  height={10}
+                  radius="md"
+                  mb="sm"
+                  style={{
+                    width: "70%",
+                  }}
+                />
+                <Skeleton
+                  height={10}
+                  radius="md"
+                  mb="sm"
+                  style={{
+                    width: "20%",
+                  }}
+                />
+              </Container>
             ))}
           </div>
-        </div>
+        )}
+
+        {!isLoading && bookings.length === 0 && (
+          <p>You currently have no bookings.</p>
+        )}
+
+        {!isLoading && bookings.length > 0 && (
+          <div className="gallery-container">
+            <div className="spotslist">
+              {bookings.map((booking) => (
+                <BookingCard key={booking._id} booking={booking} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
