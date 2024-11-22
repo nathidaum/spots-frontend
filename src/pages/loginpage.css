@@ -1,0 +1,19 @@
+.loginpage {
+  margin: 12em auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 40vw;
+}
+
+.loginpage form {
+    width: 100%
+}
+
+@media (max-width: 767px) {
+  .loginpage {
+    margin: 2em 2em 6em;
+    max-width: 100vw;
+  }
+}

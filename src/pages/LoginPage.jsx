@@ -1,9 +1,11 @@
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { TextInput, PasswordInput, Button, Text, Anchor } from "@mantine/core";
 import { AuthContext } from "../context/auth.context";
 import authService from "../services/auth.service";
+import "./loginpage.css";
 
-function LoginPage(props) {
+function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(undefined);
@@ -35,36 +37,39 @@ function LoginPage(props) {
   };
 
   return (
-    <div className="LoginPage">
-      <h1>Login</h1>
+    <div className="loginpage">
+      <h1>Login to spots. 🤙</h1>
+      <form onSubmit={handleLoginSubmit} className="login-form">
+        <TextInput
+          label="Email"
+          placeholder="Enter your email"
+          type="email"
+          value={email}
+          onChange={handleEmail}
+          required
+        />
+        <br />
 
-      <form onSubmit={handleLoginSubmit}>
-        <label>
-          Email:
-          <input
-            type="email"
-            name="email"
-            value={email}
-            onChange={handleEmail}
-          />
-        </label>
+        <PasswordInput
+          label="Password"
+          placeholder="Enter your password"
+          value={password}
+          onChange={handlePassword}
+          required
+        />
+        {errorMessage && <Text c="red">{errorMessage}</Text>}
 
-        <label>
-          Password:
-          <input
-            type="password"
-            name="password"
-            value={password}
-            onChange={handlePassword}
-          />
-        </label>
-
-        <button type="submit">Login</button>
+        <Button type="submit" color="yellow" fullWidth mt="md">
+          Login
+        </Button>
       </form>
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-      <p>Don't have an account yet?</p>
-      <Link to={"/register"}> Sign Up</Link>
+      <Text align="center" mt="md">
+        Don't have an account yet?{" "}
+        <Anchor component={Link} to="/register" c="yellow">
+          Sign Up
+        </Anchor>
+      </Text>
     </div>
   );
 }
