@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { AuthContext } from "../../context/auth.context";
 import { Menu, Avatar, Group } from "@mantine/core";
 import {
@@ -15,6 +15,9 @@ import "./navbar.css";
 
 const Navbar = () => {
   const { isLoggedIn, user, logOutUser } = useContext(AuthContext);
+  const location = useLocation(); // Get the current path
+
+  const isActive = (path) => location.pathname === path; // Check if a path is active
 
   return (
     <>
@@ -28,8 +31,18 @@ const Navbar = () => {
         <div className="navbar-right">
           {/* Navigation links */}
           <div className="navbar-links">
-            <Link to="/favorites">Favorites</Link>
-            <Link to="/bookings">Bookings</Link>
+            <Link
+              to="/favorites"
+              className={isActive("/favorites") ? "active-link" : ""}
+            >
+              Favorites
+            </Link>
+            <Link
+              to="/bookings"
+              className={isActive("/bookings") ? "active-link" : ""}
+            >
+              Bookings
+            </Link>
           </div>
 
           {/* Profile menu */}
@@ -98,20 +111,34 @@ const Navbar = () => {
 
       {/* Mobile Bottom Navbar */}
       <div className="mobile-navbar">
-        <Link to="/" className="nav-item">
-          <IconSearch />
+        <Link
+          to="/"
+          className={`nav-item ${isActive("/") ? "active-link" : ""}`}
+        >
+          <IconSearch className={isActive("/") ? "active-icon" : ""} />
           <span>Explore</span>
         </Link>
-        <Link to="/favorites" className="nav-item">
-          <IconHeart />
+        <Link
+          to="/favorites"
+          className={`nav-item ${isActive("/favorites") ? "active-link" : ""}`}
+        >
+          <IconHeart className={isActive("/favorites") ? "active-icon" : ""} />
           <span>Favorites</span>
         </Link>
-        <Link to="/bookings" className="nav-item">
-          <IconCalendar />
+        <Link
+          to="/bookings"
+          className={`nav-item ${isActive("/bookings") ? "active-link" : ""}`}
+        >
+          <IconCalendar
+            className={isActive("/bookings") ? "active-icon" : ""}
+          />
           <span>Bookings</span>
         </Link>
-        <Link to="/profile" className="nav-item">
-          <IconUser />
+        <Link
+          to="/profile"
+          className={`nav-item ${isActive("/profile") ? "active-link" : ""}`}
+        >
+          <IconUser className={isActive("/profile") ? "active-icon" : ""} />
           <span>Profile</span>
         </Link>
       </div>

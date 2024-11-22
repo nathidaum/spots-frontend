@@ -74,7 +74,21 @@
 }
 
 .nav-item:hover {
-  color: #ffa600;
+  color: orange;
+}
+
+/* Highlight active links */
+.navbar-links .active-link {
+  color: orange;
+  text-decoration: none;
+}
+
+.mobile-navbar .active-link {
+  color: orange;
+}
+
+.mobile-navbar .active-icon {
+  color: orange;
 }
 
 @media (max-width: 768px) {
