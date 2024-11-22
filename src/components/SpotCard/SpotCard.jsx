@@ -2,18 +2,19 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "@mantine/carousel/styles.css";
 import { Carousel } from "@mantine/carousel";
-import { Image, ActionIcon } from "@mantine/core";
-import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
+import { Image, ActionIcon, Notification, Box } from "@mantine/core";
+import { IconHeart, IconHeartFilled, IconAlertCircle } from "@tabler/icons-react";
 
 import "./spotcard.css";
 import authService from "../../services/auth.service";
 
 const SpotCard = ({ spot, isFavorite, onFavoriteToggle }) => {
-  // Inside SpotCard component
+    // Inside SpotCard component
   const [liked, setLiked] = useState(isFavorite); // Initial favorite state
+  const [showNotification, setShowNotification] = useState(false);
 
   // Add an effect to update `liked` when `isFavorite` changes
-  useEffect(() => {
+    useEffect(() => {
     setLiked(isFavorite);
   }, [isFavorite]);
 
@@ -22,6 +23,8 @@ const SpotCard = ({ spot, isFavorite, onFavoriteToggle }) => {
 
     if (!localStorage.getItem("authToken")) {
       console.warn("You must be logged in to favorite a spot.");
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 3000);
       return;
     }
 
@@ -74,6 +77,20 @@ const SpotCard = ({ spot, isFavorite, onFavoriteToggle }) => {
           <p className="price">€ {spot.price} per day</p>
         </div>
       </Link>
+
+      {/* Render the notification */}
+      {showNotification && (
+        <Box mt="sm">
+          <Notification
+            color="yellow"
+            icon={<IconAlertCircle size={16} />}
+            onClose={() => setShowNotification(false)}
+            disallowClose
+          >
+            You must log in to save this spot to your favorites.
+          </Notification>
+        </Box>
+      )}
     </div>
   );
 };
