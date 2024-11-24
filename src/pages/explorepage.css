@@ -3,6 +3,8 @@
   display: flex;
   flex-direction: column;
   align-items: left;
+  position: relative; /* Prevent conflicts */
+  overflow: visible; /* Ensure modal visibility */
 }
 
 .gallery-container {
@@ -22,19 +24,53 @@
 }
 
 .spotslist > * {
-  flex-grow: 0; /* Prevent uneven stretching */
-  flex-shrink: 0; /* Prevent shrinking */
-  max-width: calc(25% - 1.5em); /* Four spots per row with spacing */
-  flex-basis: calc(25% - 1.5em); /* Ensure consistent size */
+  flex-grow: 0;
+  flex-shrink: 0;
+  max-width: calc(25% - 1.5em);
+  flex-basis: calc(25% - 1.5em);
 }
 
 .mobile-skeleton {
   display: none;
 }
 
+.floating-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 24px;
+  background-color: orange;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
+  z-index: 1000; /* Ensure it floats above page content */
+}
+
+.floating-button:hover {
+  background-color: rgb(255, 132, 0);
+}
+
+.mantine-Modal-root {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.mantine-Modal-content {
+  max-width: 90%;
+  margin: auto;
+}
+
 @media (min-width: 768px) and (max-width: 1024px) {
   .spotslist > * {
-    max-width: calc(33.33% - 1em); /* Three spots per row */
+    max-width: calc(33.33% - 1em);
     flex-basis: calc(33.33% - 1em);
   }
 }

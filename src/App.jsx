@@ -10,6 +10,7 @@ import SignupPage from "./pages/SignupPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import Navbar from "./components/Navbar/Navbar";
+import CreateSpot from "./pages/CreateSpot";
 
 function App() {
   return (
@@ -39,6 +40,15 @@ function App() {
               <FavoritesPage />
             </IsPrivate>
           }
+        />
+
+        <Route 
+        path="/spots/create" 
+        element={
+          <IsPrivate>
+            <CreateSpot />
+          </IsPrivate>
+        }
         />
 
         {/* Catch-all for undefined routes */}

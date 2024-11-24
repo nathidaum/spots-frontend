@@ -1,14 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { Container, Skeleton, Title } from "@mantine/core";
+import { Container, Skeleton, Title, Button } from "@mantine/core";
 import SpotCard from "../components/SpotCard/SpotCard";
+import { Link } from "react-router-dom";
 import "./explorepage.css";
+
+import { AuthContext } from "../context/auth.context";
 
 function ExplorePage() {
   const [spots, setSpots] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
+  const {isLoggedIn } = useContext(AuthContext);
 
   useEffect(() => {
     // Update isMobile on window resize
@@ -50,6 +54,10 @@ function ExplorePage() {
         );
     }
   }, []);
+
+  const handleSpotCreated = (newSpot) => {
+    setSpots((prev) => [newSpot, ...prev]); // Add the new spot to the top of the list
+  };
 
   return (
     <div className="explorepage">
@@ -119,6 +127,19 @@ function ExplorePage() {
             ))}
           </div>
         </div>
+      )}
+
+      {/* Floating button for creating a new spot */}
+      {isLoggedIn && (
+        <>
+          <Button
+            className="floating-button"
+            component={Link} 
+            to="/spots/create"
+          >
+            +
+          </Button>
+        </>
       )}
     </div>
   );

@@ -1,0 +1,14 @@
+.page {
+  margin: 7em 0em 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow: visible;
+}
+
+@media (max-width: 767px) {
+  .page {
+    margin: 1em 1em 6em;
+  }
+}
