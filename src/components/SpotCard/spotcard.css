@@ -104,6 +104,16 @@
   background-color: transparent;
 }
 
+.desk-badge {
+  position: absolute;
+  top: 1.5em;
+  left: 10px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .spotinfo {
   margin-top: 0.6em;
 }

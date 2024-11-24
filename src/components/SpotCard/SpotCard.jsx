@@ -2,19 +2,23 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "@mantine/carousel/styles.css";
 import { Carousel } from "@mantine/carousel";
-import { Image, ActionIcon, Notification, Box } from "@mantine/core";
-import { IconHeart, IconHeartFilled, IconAlertCircle } from "@tabler/icons-react";
+import { Image, ActionIcon, Notification, Box, Badge } from "@mantine/core";
+import {
+  IconHeart,
+  IconHeartFilled,
+  IconAlertCircle,
+} from "@tabler/icons-react";
 
 import "./spotcard.css";
 import authService from "../../services/auth.service";
 
 const SpotCard = ({ spot, isFavorite, onFavoriteToggle }) => {
-    // Inside SpotCard component
+  // Inside SpotCard component
   const [liked, setLiked] = useState(isFavorite); // Initial favorite state
   const [showNotification, setShowNotification] = useState(false);
 
   // Add an effect to update `liked` when `isFavorite` changes
-    useEffect(() => {
+  useEffect(() => {
     setLiked(isFavorite);
   }, [isFavorite]);
 
@@ -50,6 +54,9 @@ const SpotCard = ({ spot, isFavorite, onFavoriteToggle }) => {
   return (
     <div className="card">
       <div className="carousel-container">
+        <Badge variant="default" color="yellow" className="desk-badge">
+          {spot.deskCount} desks
+        </Badge>
         <Carousel
           withIndicators
           // withControls={false}
