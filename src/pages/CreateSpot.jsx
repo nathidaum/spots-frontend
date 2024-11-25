@@ -10,7 +10,6 @@ import {
   MultiSelect,
   NumberInput,
   Container,
-  Text,
   Badge,
   Title,
   FileInput,
@@ -356,7 +355,7 @@ const CreateSpot = ({ onSpotCreated }) => {
                   align="center"
                   controlSize={24}
                   controlsOffset="sm"
-                  onMouseDown={(e) => e.stopPropagation()} 
+                  onMouseDown={(e) => e.stopPropagation()}
                 >
                   {slides}
                 </Carousel>
@@ -381,7 +380,7 @@ const CreateSpot = ({ onSpotCreated }) => {
         </Stepper>
 
         <Group justify="flex-end" mt="xl">
-          {active === 1 && (
+          {active !== 0 && (
             <Button
               variant="default"
               color="yellow"

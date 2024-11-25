@@ -12,7 +12,7 @@ function ExplorePage() {
   const [favorites, setFavorites] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
-  const {isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext);
 
   useEffect(() => {
     // Update isMobile on window resize
@@ -120,7 +120,7 @@ function ExplorePage() {
                   setFavorites((prev) =>
                     prev.some((fav) => fav._id === spot._id)
                       ? prev.filter((fav) => fav._id !== spot._id) // Remove if already in favorites
-                      : [...prev, spot] // Add if not in favorites
+                      : [spot, ...prev]
                   );
                 }}
               />
@@ -131,15 +131,16 @@ function ExplorePage() {
 
       {/* Floating button for creating a new spot */}
       {isLoggedIn && (
-        <>
-          <Button
-            className="floating-button"
-            component={Link} 
-            to="/spots/create"
-          >
-            +
-          </Button>
-        </>
+        <Button
+          className="floating-button"
+          component={Link}
+          to={{
+            pathname: "/spots/create",
+            state: { handleSpotCreated }, // Pass the function as state
+          }}
+        >
+          +
+        </Button>
       )}
     </div>
   );
