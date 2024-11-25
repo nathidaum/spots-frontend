@@ -9,8 +9,9 @@ import {
   NumberInput,
   Container,
   Title,
+  FileInput,
 } from "@mantine/core";
-import { DatePicker } from "@mantine/dates";
+import { DatePickerInput } from "@mantine/dates";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./createspot.css";
@@ -34,11 +35,14 @@ const CreateSpot = ({ onSpotCreated }) => {
     location: { city: "", address: "" },
     amenities: [],
     price: 0,
-    availability: [],
+    availability: { startDate: null, endDate: null },
     images: [],
   });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const [files, setFiles] = useState([]); // Define state for selected files
+  const [isUploading, setIsUploading] = useState(false); // State for upload status
 
   const handleInputChange = (field, value) => {
     setForm({ ...form, [field]: value });
@@ -48,11 +52,46 @@ const CreateSpot = ({ onSpotCreated }) => {
     setForm({ ...form, location: { ...form.location, [field]: value } });
   };
 
-  const handleAvailabilityChange = (startDate, endDate) => {
+  const handleAvailabilityChange = (field, value) => {
     setForm((prev) => ({
       ...prev,
-      availability: [...prev.availability, { startDate, endDate }],
+      availability: { ...prev.availability, [field]: value },
     }));
+  };
+
+  // image upload with cloudinary
+
+  const CLOUDINARY_URL = import.meta.env.VITE_CLOUDINARY_URL;
+  const CLOUDINARY_UPLOAD_PRESET = import.meta.env
+    .VITE_CLOUDINARY_UPLOAD_PRESET;
+
+  const handleUpload = async () => {
+    if (!files.length) {
+      alert("Please select images to upload.");
+      return;
+    }
+
+    setIsUploading(true);
+    const uploadedUrls = [];
+
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append("file", file); // Append the file
+      formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET); // Append the upload preset
+
+      try {
+        const response = await axios.post(CLOUDINARY_URL, formData);
+        uploadedUrls.push(response.data.secure_url); // Save the secure URL from Cloudinary response
+        console.log(response.data.secure_url)
+      } catch (err) {
+        console.error("Error uploading image:", err);
+        alert("Image upload failed. Please try again.");
+      }
+    }
+
+    setForm((prev) => ({ ...prev, images: uploadedUrls })); // Update form with uploaded image URLs
+    setIsUploading(false);
+    alert("Images uploaded successfully!");
   };
 
   const handleSubmit = async () => {
@@ -60,22 +99,24 @@ const CreateSpot = ({ onSpotCreated }) => {
       setIsSubmitting(true);
 
       try {
-        // Ensure correct formatting for availability
         const formattedForm = {
           ...form,
-          availability: form.availability.map((range) => ({
-            startDate: range.startDate,
-            endDate: range.endDate,
-          })),
+          availability: [
+            {
+              startDate: form.availability.startDate,
+              endDate: form.availability.endDate,
+            },
+          ],
         };
 
-        console.log("Submitting Form Data:", formattedForm);
-
-        // Submit the form data to the server
         const token = localStorage.getItem("authToken");
-        const response = await axios.post("http://localhost:3000/spots", formattedForm, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await axios.post(
+          "http://localhost:3000/spots",
+          formattedForm,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         if (onSpotCreated) onSpotCreated(response.data.spot);
         setForm({
@@ -85,18 +126,21 @@ const CreateSpot = ({ onSpotCreated }) => {
           location: { city: "", address: "" },
           amenities: [],
           price: 0,
-          availability: [],
+          availability: { startDate: null, endDate: null },
           images: [],
         });
 
-        navigate("/spots"); // Redirect after successful creation
+        navigate("/spots");
       } catch (err) {
-        console.error("Error creating spot:", err.response?.data || err.message);
+        console.error(
+          "Error creating spot:",
+          err.response?.data || err.message
+        );
       } finally {
         setIsSubmitting(false);
       }
     } else {
-      setActive((prev) => Math.min(prev + 1, 2)); // Move to the next step
+      setActive((prev) => Math.min(prev + 1, 2));
     }
   };
 
@@ -174,18 +218,24 @@ const CreateSpot = ({ onSpotCreated }) => {
               mt="md"
             />
 
-            <DatePicker
-              label="Availability Start Date"
-              placeholder="Pick start date"
-              onChange={(date) => handleAvailabilityChange(date, form.availability?.[0]?.endDate || null)}
-              mt="md"
-            />
-            <DatePicker
-              label="Availability End Date"
-              placeholder="Pick end date"
-              onChange={(date) => handleAvailabilityChange(form.availability?.[0]?.startDate || null, date)}
-              mt="md"
-            />
+            <Group grow mt="md">
+              <DatePickerInput
+                dropdownType="modal"
+                label="Start Date"
+                placeholder="Pick start date"
+                value={form.availability.startDate}
+                onChange={(value) =>
+                  handleAvailabilityChange("startDate", value)
+                }
+              />
+              <DatePickerInput
+                dropdownType="modal"
+                label="End Date"
+                placeholder="Pick end date"
+                value={form.availability.endDate}
+                onChange={(value) => handleAvailabilityChange("endDate", value)}
+              />
+            </Group>
           </Stepper.Step>
 
           {/* Step 2: Upload Images */}
@@ -194,18 +244,39 @@ const CreateSpot = ({ onSpotCreated }) => {
             color="yellow"
             description="Add images for the spot"
           >
-            <Textarea
-              label="Images (comma-separated URLs)"
-              value={form.images.join(", ")}
-              onChange={(e) =>
-                handleInputChange(
-                  "images",
-                  e.target.value.split(",").map((url) => url.trim())
-                )
-              }
-              required
+            <FileInput
+              label="Upload Images"
+              placeholder="Select images"
+              multiple
+              value={files} // Store selected files
+              onChange={setFiles} // Update files state
               mt="md"
             />
+            <Button
+              onClick={handleUpload}
+              disabled={!files.length || isUploading}
+              loading={isUploading}
+              mt="md"
+            >
+              Upload Images
+            </Button>
+
+            {form.images.length > 0 && (
+              <div>
+                <Title order={4} mt="md">
+                  Uploaded Images:
+                </Title>
+                <ul>
+                  {form.images.map((url, index) => (
+                    <li key={index}>
+                      <a href={url} target="_blank" rel="noopener noreferrer">
+                        View Image {index + 1}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </Stepper.Step>
 
           {/* Step 3: Review & Save */}
@@ -238,11 +309,9 @@ const CreateSpot = ({ onSpotCreated }) => {
             </div>
             <div>
               <strong>Availability:</strong>{" "}
-              {form.availability.map((range) =>
-                range.startDate && range.endDate
-                  ? `${new Date(range.startDate).toLocaleDateString()} to ${new Date(range.endDate).toLocaleDateString()}`
-                  : "N/A"
-              ).join(", ")}
+              {form.availability.startDate && form.availability.endDate
+                ? `${form.availability.startDate.toLocaleDateString()} to ${form.availability.endDate.toLocaleDateString()}`
+                : "N/A"}
             </div>
             <div>
               <strong>Images:</strong> {form.images.join(", ")}
@@ -251,7 +320,7 @@ const CreateSpot = ({ onSpotCreated }) => {
 
           <Stepper.Completed>
             <div>Spot created successfully!</div>
-            <Button onClick={() => navigate("/spots")} mt="md">
+            <Button onClick={() => navigate("/")} mt="md">
               Go to Spots List
             </Button>
           </Stepper.Completed>
