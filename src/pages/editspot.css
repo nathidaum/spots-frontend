@@ -1,0 +1,18 @@
+.edit-page {
+    margin: 7em auto 2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: visible;
+    max-width: 60vw
+  }
+
+
+@media (max-width: 767px) {
+    .edit-page {
+      margin: 1em 1em 6em;
+      max-width: 100vw
+    }
+  }

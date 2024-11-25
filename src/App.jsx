@@ -11,6 +11,7 @@ import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import Navbar from "./components/Navbar/Navbar";
 import CreateSpot from "./pages/CreateSpot";
+import EditSpot from "./pages/EditSpot";
 
 function App() {
   return (
@@ -42,13 +43,22 @@ function App() {
           }
         />
 
-        <Route 
-        path="/spots/create" 
-        element={
-          <IsPrivate>
-            <CreateSpot />
-          </IsPrivate>
-        }
+        <Route
+          path="/spots/create"
+          element={
+            <IsPrivate>
+              <CreateSpot />
+            </IsPrivate>
+          }
+        />
+
+        <Route
+          path="/spots/:spotId/edit"
+          element={
+            <IsPrivate>
+              <EditSpot />
+            </IsPrivate>
+          }
         />
 
         {/* Catch-all for undefined routes */}

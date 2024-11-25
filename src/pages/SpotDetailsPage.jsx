@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import {
-  Container,
   Text,
   Title,
   Button,
@@ -11,15 +10,18 @@ import {
   Skeleton,
   Flex,
   ActionIcon,
+  Group,
 } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
-import { IconArrowLeft, IconCheck } from "@tabler/icons-react";
+import { IconArrowLeft, IconCheck, IconEdit } from "@tabler/icons-react";
 import "./spotdetailspage.css";
 import "../components/SpotCard/spotcard.css";
+import { AuthContext } from "../context/auth.context";
 
 function SpotDetailsPage() {
   const { id } = useParams();
   const [spot, setSpot] = useState(null);
+  const { user } = useContext(AuthContext); // Get the current user from context
 
   useEffect(() => {
     if (!id) return;
@@ -35,45 +37,86 @@ function SpotDetailsPage() {
 
   if (!spot) {
     return (
-      <Container>
-        <Skeleton height={300} radius="md" />
-        <Skeleton height={20} mt="md" radius="sm" />
-        <Skeleton height={20} mt="xs" radius="sm" />
-        <Skeleton height={50} mt="md" radius="sm" />
-      </Container>
+      <div className="skeleton-detailed-page">
+        <Skeleton height={260} />
+        <Skeleton height={40} mt="md" radius="sm" style={{ width: "100%" }} />
+        <Skeleton
+          height={40}
+          mt="md"
+          radius="sm"
+          ml="md"
+          mr="md"
+          style={{ width: "60%" }}
+        />
+        <Skeleton
+          height={50}
+          mt="xs"
+          ml="md"
+          mr="md"
+          radius="sm"
+          style={{ width: "80%" }}
+        />
+        <Skeleton
+          height={10}
+          mt="md"
+          ml="md"
+          mr="md"
+          radius="sm"
+          style={{ width: "80%" }}
+        />
+      </div>
     );
   }
 
   return (
     <div className="detailspage">
-      {/* Images Section */}
-      <div>
-        <Carousel withIndicators loop height="30vh" withControls={false}>
-          {spot.images.map((image, index) => (
-            <Carousel.Slide key={index}>
-              <div className="image-container">
-                <img
-                  src={image}
-                  alt={`Spot image ${index + 1}`}
-                  className="carousel-image"
-                />
-                <div className="image-overlay"></div>
-              </div>
-            </Carousel.Slide>
-          ))}
-        </Carousel>
+      {/* Icons Section */}
+      <div className="detailed-carousel-container">
+        <Group justify="flex-end">
+          {/* Back Icon */}
+          <ActionIcon
+            size="md"
+            m={10}
+            className="arrowback-icon"
+            c="yellow"
+            component={Link}
+            to="/"
+          >
+            <IconArrowLeft color="black" />
+          </ActionIcon>
 
-        {/* Mobile back icon */}
-        <ActionIcon
-          size="md"
-          m={10}
-          className="arrowback-icon"
-          c="yellow"
-          component={Link}
-          to="/"
-        >
-          <IconArrowLeft color="black" />
-        </ActionIcon>
+          {/* Edit Icon - Conditional Rendering */}
+          {user?._id === spot.createdBy?._id && (
+            <ActionIcon
+              size="md"
+              m={10}
+              className="edit-icon"
+              c="yellow"
+              component={Link}
+              to={`/spots/${spot._id}/edit`}
+            >
+              <IconEdit color="black" />
+            </ActionIcon>
+          )}
+        </Group>
+
+        {/* Images Section */}
+        <div>
+          <Carousel withIndicators loop height="30vh" withControls={false}>
+            {spot.images.map((image, index) => (
+              <Carousel.Slide key={index}>
+                <div className="image-container">
+                  <img
+                    src={image}
+                    alt={`Spot image ${index + 1}`}
+                    className="detailed-carousel-image"
+                  />
+                  <div className="image-overlay"></div>
+                </div>
+              </Carousel.Slide>
+            ))}
+          </Carousel>
+        </div>
       </div>
 
       <section className="detailed-content">
@@ -106,7 +149,7 @@ function SpotDetailsPage() {
               <List.Item key={index}>{amenity}</List.Item>
             ))}
           </List>
-          <br></br>
+          <br />
 
           {/* About Host */}
           <div mt="lg">

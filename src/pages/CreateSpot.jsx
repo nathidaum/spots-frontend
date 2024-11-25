@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
   Stepper,
   Button,
@@ -16,10 +18,9 @@ import {
 } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import { DatePickerInput } from "@mantine/dates";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import "./createspot.css";
 import { IconTrash } from "@tabler/icons-react";
+
+import "./createspot.css";
 import "../components/SpotCard/spotcard.css";
 
 const amenitiesOptions = [
