@@ -7,8 +7,28 @@
   overflow: visible;
 }
 
+.preview-card {
+    margin: 2em 0em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.preview-image-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  justify-content: center;
+}
+
 @media (max-width: 767px) {
   .page {
     margin: 1em 1em 6em;
   }
+  .preview-card {
+    width: 100%;
+    margin-bottom: 1em;
+  }
 }
+

@@ -8,13 +8,19 @@ import {
   MultiSelect,
   NumberInput,
   Container,
+  Text,
+  Badge,
   Title,
   FileInput,
+  ActionIcon,
 } from "@mantine/core";
+import { Carousel } from "@mantine/carousel";
 import { DatePickerInput } from "@mantine/dates";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./createspot.css";
+import { IconTrash } from "@tabler/icons-react";
+import "../components/SpotCard/spotcard.css";
 
 const amenitiesOptions = [
   "Wifi",
@@ -82,7 +88,7 @@ const CreateSpot = ({ onSpotCreated }) => {
       try {
         const response = await axios.post(CLOUDINARY_URL, formData);
         uploadedUrls.push(response.data.secure_url); // Save the secure URL from Cloudinary response
-        console.log(response.data.secure_url)
+        console.log(response.data.secure_url);
       } catch (err) {
         console.error("Error uploading image:", err);
         alert("Image upload failed. Please try again.");
@@ -92,6 +98,27 @@ const CreateSpot = ({ onSpotCreated }) => {
     setForm((prev) => ({ ...prev, images: uploadedUrls })); // Update form with uploaded image URLs
     setIsUploading(false);
     alert("Images uploaded successfully!");
+  };
+
+  const slides = form.images.map((url, index) => (
+    <Carousel.Slide key={index}>
+      <img
+        src={url}
+        alt={`carousel-${index}`}
+        style={{
+          width: "100%",
+          height: "300px",
+          objectFit: "cover",
+          borderRadius: "8px",
+        }}
+      />
+    </Carousel.Slide>
+  ));
+
+  const handleDelete = (indexToRemove) => {
+    setFiles((prevFiles) =>
+      prevFiles.filter((_, index) => index !== indexToRemove)
+    );
   };
 
   const handleSubmit = async () => {
@@ -130,7 +157,7 @@ const CreateSpot = ({ onSpotCreated }) => {
           images: [],
         });
 
-        navigate("/spots");
+        navigate("/");
       } catch (err) {
         console.error(
           "Error creating spot:",
@@ -146,7 +173,7 @@ const CreateSpot = ({ onSpotCreated }) => {
 
   return (
     <div className="page">
-      <Container size="xl" mt="xl">
+      <Container size="xl" mt="xl" className="steps-container">
         <Title order={2} align="center" mb="xl">
           Insert your spot 🫶
         </Title>
@@ -252,31 +279,62 @@ const CreateSpot = ({ onSpotCreated }) => {
               onChange={setFiles} // Update files state
               mt="md"
             />
+            {files.length > 0 && (
+              <>
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "10px",
+                    marginTop: "10px",
+                  }}
+                >
+                  {files.map((file, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        position: "relative",
+                        overflow: "hidden",
+                        borderRadius: "8px",
+                        boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                      }}
+                    >
+                      {/* Image Thumbnail */}
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt={`preview-${index}`}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      {/* Delete Button */}
+                      <ActionIcon
+                        onClick={() => handleDelete(index)}
+                        size="md"
+                        className="heart-icon"
+                      >
+                        <IconTrash color="orange" />
+                      </ActionIcon>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
             <Button
               onClick={handleUpload}
               disabled={!files.length || isUploading}
               loading={isUploading}
               mt="md"
+              fullWidth
+              color="black"
             >
-              Upload Images
+              Upload selected images
             </Button>
-
-            {form.images.length > 0 && (
-              <div>
-                <Title order={4} mt="md">
-                  Uploaded Images:
-                </Title>
-                <ul>
-                  {form.images.map((url, index) => (
-                    <li key={index}>
-                      <a href={url} target="_blank" rel="noopener noreferrer">
-                        View Image {index + 1}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </Stepper.Step>
 
           {/* Step 3: Review & Save */}
@@ -285,36 +343,31 @@ const CreateSpot = ({ onSpotCreated }) => {
             color="yellow"
             description="Review and save the spot"
           >
-            <Title order={3} align="center" mb="lg">
-              Please review the details of your spot before saving.
-            </Title>
-            <div>
-              <strong>Title:</strong> {form.title}
-            </div>
-            <div>
-              <strong>Description:</strong> {form.description}
-            </div>
-            <div>
-              <strong>Desk Count:</strong> {form.deskCount}
-            </div>
-            <div>
-              <strong>Location:</strong> {form.location.city},{" "}
-              {form.location.address}
-            </div>
-            <div>
-              <strong>Amenities:</strong> {form.amenities.join(", ")}
-            </div>
-            <div>
-              <strong>Price:</strong> €{form.price}
-            </div>
-            <div>
-              <strong>Availability:</strong>{" "}
-              {form.availability.startDate && form.availability.endDate
-                ? `${form.availability.startDate.toLocaleDateString()} to ${form.availability.endDate.toLocaleDateString()}`
-                : "N/A"}
-            </div>
-            <div>
-              <strong>Images:</strong> {form.images.join(", ")}
+            <div className="preview-card">
+              <div className="carousel-container">
+                <Badge variant="default" color="yellow" className="desk-badge">
+                  {form.deskCount} desks
+                </Badge>
+                <Carousel
+                  withIndicators
+                  height={300}
+                  loop
+                  align="center"
+                  controlSize={24}
+                  controlsOffset="sm"
+                  onMouseDown={(e) => e.stopPropagation()} 
+                >
+                  {slides}
+                </Carousel>
+              </div>
+
+              <div className="spotinfo-link">
+                <div className="spotinfo">
+                  <p className="title">{form.title}</p>
+                  <p className="location">{form.location.city}</p>
+                  <p className="price">€ {form.price} per day</p>
+                </div>
+              </div>
             </div>
           </Stepper.Step>
 
@@ -326,14 +379,16 @@ const CreateSpot = ({ onSpotCreated }) => {
           </Stepper.Completed>
         </Stepper>
 
-        <Group justify="center" mt="xl">
-          <Button
-            variant="default"
-            color="yellow"
-            onClick={() => setActive((prev) => Math.max(prev - 1, 0))}
-          >
-            Back
-          </Button>
+        <Group justify="flex-end" mt="xl">
+          {active === 1 && (
+            <Button
+              variant="default"
+              color="yellow"
+              onClick={() => setActive((prev) => Math.max(prev - 1, 0))}
+            >
+              Back
+            </Button>
+          )}
           <Button
             color="yellow"
             onClick={handleSubmit}
