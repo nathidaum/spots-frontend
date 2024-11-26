@@ -13,7 +13,7 @@ import {
   Group,
 } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
-import { DatePicker } from "@mantine/dates";
+import { DateInput } from '@mantine/dates';
 import { modals } from "@mantine/modals";
 import {
   IconArrowLeft,
@@ -36,7 +36,6 @@ function SpotDetailsPage() {
   const [endDate, setEndDate] = useState(null); // End date for booking
   const [blockedDates, setBlockedDates] = useState([]); // Store blocked dates
 
-
   // Check if booking is available
   const isBookingAvailable = useMemo(() => {
     if (!startDate || !endDate) return false;
@@ -57,17 +56,18 @@ function SpotDetailsPage() {
       const end = new Date(endDate);
       return date >= start && date <= end;
     });
-  };  
-  
+  };
+
   useEffect(() => {
     if (!id) return;
 
     // Fetch spot details and blocked dates
-    axios.get(`http://localhost:3000/spots/${id}`)
-    .then((response) => {
-      setSpot(response.data.spot);
-      setBlockedDates(response.data.spot.blockedDates || []);
-    })
+    axios
+      .get(`http://localhost:3000/spots/${id}`)
+      .then((response) => {
+        setSpot(response.data.spot);
+        setBlockedDates(response.data.spot.blockedDates || []);
+      })
       .catch((error) => console.error(`Error fetching spot ${id}:`, error));
   }, [id]);
 
@@ -76,10 +76,10 @@ function SpotDetailsPage() {
       console.error("Start and end dates must be selected.");
       return;
     }
-  
+
     try {
       const token = localStorage.getItem("authToken");
-  
+
       const response = await axios.post(
         "http://localhost:3000/bookings",
         {
@@ -89,23 +89,23 @@ function SpotDetailsPage() {
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-  
+
       console.log("Booking successful:", response.data);
-  
+
       // Update blockedDates with the new booking
       setBlockedDates((prev) => [
         ...prev,
         { startDate: startDate.toISOString(), endDate: endDate.toISOString() },
       ]);
-  
+
       setStartDate(null);
       setEndDate(null);
-  
+
       navigate(`/bookingconfirmation/${response.data.booking._id}`);
     } catch (error) {
       console.error("Server Response:", error.response?.data);
     }
-  };  
+  };
 
   const openDeleteModal = () => {
     setIsModalOpen(true); // Track modal open state
@@ -259,7 +259,7 @@ function SpotDetailsPage() {
           <Title order={2} mt="lg" mb="sm">
             Book this Spot
           </Title>
-          <DatePicker
+          <DateInput
             value={startDate}
             onChange={(date) => {
               setStartDate(date);
@@ -268,7 +268,12 @@ function SpotDetailsPage() {
             placeholder="Start Date"
             minDate={new Date()}
             excludeDate={excludeDate}
+            label="Start Date"
+            withAsterisk
             styles={{
+              input: {
+                backgroundColor: "white",
+              },
               day: (date, modifiers) => ({
                 backgroundColor: modifiers.disabled ? "#f0f0f0" : undefined,
                 color: modifiers.disabled ? "#b0b0b0" : undefined,
@@ -276,13 +281,19 @@ function SpotDetailsPage() {
               }),
             }}
           />
-          <DatePicker
+
+          <DateInput
             value={endDate}
             onChange={setEndDate}
             placeholder="End Date"
             minDate={startDate || new Date()} // End date must be after start date
             excludeDate={excludeDate}
+            label="End Date"
+            withAsterisk
             styles={{
+              input: {
+                backgroundColor: "white",
+              },
               day: (date, modifiers) => ({
                 backgroundColor: modifiers.disabled ? "#f0f0f0" : undefined,
                 color: modifiers.disabled ? "#b0b0b0" : undefined,
