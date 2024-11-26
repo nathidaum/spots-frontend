@@ -41,23 +41,24 @@ function ExplorePage() {
         setIsLoading(false);
       });
 
-    // Fetch user favorites
-    const token = localStorage.getItem("authToken");
-    if (token) {
-      axios
-        .get("http://localhost:3000/users/favorites", {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((response) => setFavorites(response.data.favorites || []))
-        .catch((error) =>
-          console.error("Error fetching user favorites:", error)
-        );
+    if (isLoggedIn) {
+      const token = localStorage.getItem("authToken");
+      if (token) {
+        axios
+          .get("http://localhost:3000/users/favorites", {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((response) => setFavorites(response.data.favorites || []))
+          .catch((error) => {
+            console.warn("Error fetching user favorites:", error.message);
+            // Optional: Clear token from localStorage if it's invalid
+            if (error.response?.status === 401) {
+              localStorage.removeItem("authToken");
+            }
+          });
+      }
     }
-  }, []);
-
-  const handleSpotCreated = (newSpot) => {
-    setSpots((prev) => [newSpot, ...prev]); // Add the new spot to the top of the list
-  };
+  }, [isLoggedIn]);
 
   return (
     <div className="explorepage">
