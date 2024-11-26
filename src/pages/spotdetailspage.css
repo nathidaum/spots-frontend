@@ -86,6 +86,7 @@
   background-color: orange;
 }
 
+
 @media (max-width: 768px) {
   .sticky-footer {
     position: fixed;
@@ -100,11 +101,18 @@
     justify-content: space-between;
     align-items: center;
   }
-  .sticky-footer .price-info {
+  .sticky-footer {
     display: flex;
     align-items: space-between;
     gap: 2em;
   }
+
+  .price-info {
+    display: flex;
+    flex-direction: column; 
+    justify-content: flex-start
+  }
+
   .detailspage {
     margin: 0em 0em 6em;
     top: 0;
@@ -119,5 +127,8 @@
     display: flex; 
     justify-content: flex-start;
     align-items: flex-start;
+  }
+  .desktop-booking-button {
+    display: none;
   }
 }

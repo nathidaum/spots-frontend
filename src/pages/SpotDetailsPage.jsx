@@ -1,5 +1,5 @@
-import { useState, useEffect, useContext } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useState, useEffect, useContext, useMemo } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   Text,
@@ -13,6 +13,7 @@ import {
   Group,
 } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
+import { DatePicker } from "@mantine/dates";
 import { modals } from "@mantine/modals";
 import {
   IconArrowLeft,
@@ -25,10 +26,86 @@ import "../components/SpotCard/spotcard.css";
 import { AuthContext } from "../context/auth.context";
 
 function SpotDetailsPage() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [spot, setSpot] = useState(null);
   const { user } = useContext(AuthContext); // Get the current user from context
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [availabilities, setAvailabilities] = useState([]); // Store available date ranges
+  const [startDate, setStartDate] = useState(null); // Start date for booking
+  const [endDate, setEndDate] = useState(null); // End date for booking
+  const [blockedDates, setBlockedDates] = useState([]); // Store blocked dates
+
+
+  // Check if booking is available
+  const isBookingAvailable = useMemo(() => {
+    if (!startDate || !endDate) return false;
+    return availabilities.some(
+      ({ startDate: rangeStart, endDate: rangeEnd }) => {
+        const start = new Date(rangeStart);
+        const end = new Date(rangeEnd);
+        return startDate >= start && endDate <= end;
+      }
+    );
+  }, [startDate, endDate, availabilities]);
+
+  // Exclude booked dates
+  const excludeDate = (date) => {
+    const currentDate = date.toISOString().split("T")[0]; // Format date as YYYY-MM-DD
+    return blockedDates.some(({ startDate, endDate }) => {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      return date >= start && date <= end;
+    });
+  };  
+  
+  useEffect(() => {
+    if (!id) return;
+
+    // Fetch spot details and blocked dates
+    axios.get(`http://localhost:3000/spots/${id}`)
+    .then((response) => {
+      setSpot(response.data.spot);
+      setBlockedDates(response.data.spot.blockedDates || []);
+    })
+      .catch((error) => console.error(`Error fetching spot ${id}:`, error));
+  }, [id]);
+
+  const handleBookingSubmit = async () => {
+    if (!startDate || !endDate) {
+      console.error("Start and end dates must be selected.");
+      return;
+    }
+  
+    try {
+      const token = localStorage.getItem("authToken");
+  
+      const response = await axios.post(
+        "http://localhost:3000/bookings",
+        {
+          spotId: id,
+          startDate: startDate.toISOString(),
+          endDate: endDate.toISOString(),
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      console.log("Booking successful:", response.data);
+  
+      // Update blockedDates with the new booking
+      setBlockedDates((prev) => [
+        ...prev,
+        { startDate: startDate.toISOString(), endDate: endDate.toISOString() },
+      ]);
+  
+      setStartDate(null);
+      setEndDate(null);
+  
+      navigate(`/bookingconfirmation/${response.data.booking._id}`);
+    } catch (error) {
+      console.error("Server Response:", error.response?.data);
+    }
+  };  
 
   const openDeleteModal = () => {
     setIsModalOpen(true); // Track modal open state
@@ -52,27 +129,13 @@ function SpotDetailsPage() {
           });
           console.log("Spot deleted successfully.");
           setIsModalOpen(false); // Close modal
-          // Redirect or provide feedback
           window.location.href = "/"; // Redirect to home page
         } catch (error) {
           console.error("Error deleting spot:", error);
-          // Optionally, show error feedback to the user
         }
       },
     });
   };
-
-  useEffect(() => {
-    if (!id) return;
-
-    axios
-      .get(`http://localhost:3000/spots/${id}`)
-      .then((response) => {
-        console.log(response.data.spot);
-        setSpot(response.data.spot);
-      })
-      .catch((error) => console.error(`Error fetching spot ${id}:`, error));
-  }, [id]);
 
   if (!spot) {
     return (
@@ -112,7 +175,6 @@ function SpotDetailsPage() {
       {/* Icons Section */}
       <div className="detailed-carousel-container">
         <Group justify="flex-end">
-          {/* Back Icon */}
           <ActionIcon
             size="md"
             m={10}
@@ -123,10 +185,8 @@ function SpotDetailsPage() {
           >
             <IconArrowLeft color="black" />
           </ActionIcon>
-
-          <div>
-            {/* Edit Icon - Conditional Rendering */}
-            {user?._id === spot.createdBy?._id && (
+          {user?._id === spot.createdBy?._id && (
+            <>
               <ActionIcon
                 size="md"
                 m={10}
@@ -137,9 +197,6 @@ function SpotDetailsPage() {
               >
                 <IconEdit color="black" />
               </ActionIcon>
-            )}
-            {/* Delete Icon - Conditional Rendering */}
-            {user?._id === spot.createdBy?._id && (
               <ActionIcon
                 size="md"
                 m={10}
@@ -149,44 +206,31 @@ function SpotDetailsPage() {
               >
                 <IconTrash color="black" />
               </ActionIcon>
-            )}
-          </div>
+            </>
+          )}
         </Group>
-
-        {/* Images Section */}
-        <div>
-          <Carousel withIndicators loop height="30vh" withControls={false}>
-            {spot.images.map((image, index) => (
-              <Carousel.Slide key={index}>
-                <div className="image-container">
-                  <img
-                    src={image}
-                    alt={`Spot image ${index + 1}`}
-                    className="detailed-carousel-image"
-                  />
-                  <div className="image-overlay"></div>
-                </div>
-              </Carousel.Slide>
-            ))}
-          </Carousel>
-        </div>
+        <Carousel withIndicators loop height="30vh" withControls={false}>
+          {spot.images.map((image, index) => (
+            <Carousel.Slide key={index}>
+              <div className="image-container">
+                <img
+                  src={image}
+                  alt={`Spot image ${index + 1}`}
+                  className="detailed-carousel-image"
+                />
+                <div className="image-overlay"></div>
+              </div>
+            </Carousel.Slide>
+          ))}
+        </Carousel>
       </div>
-
       <section className="detailed-content">
-        {/* Content Section */}
         <Flex direction="column" mt="md">
-          {/* Title and Location */}
-          <div>
-            <Title order={1}>{spot.title}</Title>
-            <Text size="sm" c="dimmed" mt="sm">
-              📍 {spot.location.city}, {spot.location.address}
-            </Text>
-          </div>
-
-          {/* Description */}
+          <Title order={1}>{spot.title}</Title>
+          <Text size="sm" c="dimmed" mt="sm">
+            📍 {spot.location.city}, {spot.location.address}
+          </Text>
           <Text mt="md">{spot.description}</Text>
-
-          {/* Amenities */}
           <Title order={2} mt="lg" mb="sm">
             Amenities
           </Title>
@@ -203,34 +247,66 @@ function SpotDetailsPage() {
             ))}
           </List>
           <br />
-
-          {/* About Host */}
-          <div mt="lg">
-            <Title order={3}>About the Host</Title>
+          <Title order={3}>About the Host</Title>
+          <Text>
+            {spot.createdBy.firstName} {spot.createdBy.lastName}
+          </Text>
+          {spot.createdBy.company && (
             <Text>
-              {spot.createdBy.firstName} {spot.createdBy.lastName}
+              Company: <strong>{spot.createdBy.company}</strong>
             </Text>
-            {spot.createdBy.company && (
-              <Text>
-                Company: <strong>{spot.createdBy.company}</strong>
-              </Text>
-            )}
-          </div>
+          )}
+          <Title order={2} mt="lg" mb="sm">
+            Book this Spot
+          </Title>
+          <DatePicker
+            value={startDate}
+            onChange={(date) => {
+              setStartDate(date);
+              if (endDate && date > endDate) setEndDate(null); // Reset end date if invalid
+            }}
+            placeholder="Start Date"
+            minDate={new Date()}
+            excludeDate={excludeDate}
+            styles={{
+              day: (date, modifiers) => ({
+                backgroundColor: modifiers.disabled ? "#f0f0f0" : undefined,
+                color: modifiers.disabled ? "#b0b0b0" : undefined,
+                pointerEvents: modifiers.disabled ? "none" : undefined,
+              }),
+            }}
+          />
+          <DatePicker
+            value={endDate}
+            onChange={setEndDate}
+            placeholder="End Date"
+            minDate={startDate || new Date()} // End date must be after start date
+            excludeDate={excludeDate}
+            styles={{
+              day: (date, modifiers) => ({
+                backgroundColor: modifiers.disabled ? "#f0f0f0" : undefined,
+                color: modifiers.disabled ? "#b0b0b0" : undefined,
+                pointerEvents: modifiers.disabled ? "none" : undefined,
+              }),
+            }}
+          />
         </Flex>
       </section>
-
-      {/* Sticky Footer for Mobile */}
+      <Button
+        color="yellow"
+        size="md"
+        className="desktop-booking-button"
+        onClick={handleBookingSubmit}
+      >
+        Book
+      </Button>
       <div className="sticky-footer">
         <div className="price-info">
           <Text fw={600} size="lg">
             €{spot.price} / day
           </Text>
         </div>
-        <Button
-          color="yellow"
-          size="lg"
-          onClick={() => console.log("Booking initiated!")}
-        >
+        <Button color="yellow" size="lg" onClick={handleBookingSubmit}>
           Book
         </Button>
       </div>

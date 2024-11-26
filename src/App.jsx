@@ -12,6 +12,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import Navbar from "./components/Navbar/Navbar";
 import CreateSpot from "./pages/CreateSpot";
 import EditSpot from "./pages/EditSpot";
+import BookingConfirmation from "./pages/BookingConfirmation";
 
 function App() {
   return (
@@ -57,6 +58,15 @@ function App() {
           element={
             <IsPrivate>
               <EditSpot />
+            </IsPrivate>
+          }
+        />
+
+<Route
+          path="/bookingconfirmation/:bookingId/"
+          element={
+            <IsPrivate>
+              <BookingConfirmation />
             </IsPrivate>
           }
         />
