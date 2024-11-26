@@ -13,7 +13,13 @@ import {
   Group,
 } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
-import { IconArrowLeft, IconCheck, IconEdit } from "@tabler/icons-react";
+import { modals } from "@mantine/modals";
+import {
+  IconArrowLeft,
+  IconCheck,
+  IconEdit,
+  IconTrash,
+} from "@tabler/icons-react";
 import "./spotdetailspage.css";
 import "../components/SpotCard/spotcard.css";
 import { AuthContext } from "../context/auth.context";
@@ -22,6 +28,39 @@ function SpotDetailsPage() {
   const { id } = useParams();
   const [spot, setSpot] = useState(null);
   const { user } = useContext(AuthContext); // Get the current user from context
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openDeleteModal = () => {
+    setIsModalOpen(true); // Track modal open state
+    modals.openConfirmModal({
+      title: "Delete this spot 🗑️",
+      centered: true,
+      children: (
+        <Text size="sm">
+          Are you sure you want to delete this spot? This action cannot be
+          reverted. 😢
+        </Text>
+      ),
+      labels: { confirm: "Delete spot", cancel: "Don't delete" },
+      confirmProps: { color: "orange" },
+      onCancel: () => setIsModalOpen(false), // Close modal on cancel
+      onConfirm: async () => {
+        try {
+          const token = localStorage.getItem("authToken");
+          await axios.delete(`http://localhost:3000/spots/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          console.log("Spot deleted successfully.");
+          setIsModalOpen(false); // Close modal
+          // Redirect or provide feedback
+          window.location.href = "/"; // Redirect to home page
+        } catch (error) {
+          console.error("Error deleting spot:", error);
+          // Optionally, show error feedback to the user
+        }
+      },
+    });
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -85,19 +124,33 @@ function SpotDetailsPage() {
             <IconArrowLeft color="black" />
           </ActionIcon>
 
-          {/* Edit Icon - Conditional Rendering */}
-          {user?._id === spot.createdBy?._id && (
-            <ActionIcon
-              size="md"
-              m={10}
-              className="edit-icon"
-              c="yellow"
-              component={Link}
-              to={`/spots/${spot._id}/edit`}
-            >
-              <IconEdit color="black" />
-            </ActionIcon>
-          )}
+          <div>
+            {/* Edit Icon - Conditional Rendering */}
+            {user?._id === spot.createdBy?._id && (
+              <ActionIcon
+                size="md"
+                m={10}
+                className="edit-icon"
+                c="yellow"
+                component={Link}
+                to={`/spots/${spot._id}/edit`}
+              >
+                <IconEdit color="black" />
+              </ActionIcon>
+            )}
+            {/* Delete Icon - Conditional Rendering */}
+            {user?._id === spot.createdBy?._id && (
+              <ActionIcon
+                size="md"
+                m={10}
+                className="delete-spot-icon"
+                c="yellow"
+                onClick={openDeleteModal}
+              >
+                <IconTrash color="black" />
+              </ActionIcon>
+            )}
+          </div>
         </Group>
 
         {/* Images Section */}

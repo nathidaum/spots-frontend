@@ -16,6 +16,7 @@
     "@mantine/core": "^7.14.2",
     "@mantine/dates": "^7.14.2",
     "@mantine/hooks": "^7.14.2",
+    "@mantine/modals": "^7.14.2",
     "@tabler/icons-react": "^3.22.0",
     "axios": "^1.7.7",
     "dayjs": "^1.11.13",
