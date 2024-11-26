@@ -49,6 +49,7 @@ const CreateSpot = ({ onSpotCreated }) => {
   const navigate = useNavigate();
   const [files, setFiles] = useState([]); // Define state for selected files
   const [isUploading, setIsUploading] = useState(false); // State for upload status
+  const [successMessage, setSuccessMessage] = useState(""); // New state for success feedback
 
   const handleInputChange = (field, value) => {
     setForm({ ...form, [field]: value });
@@ -77,27 +78,28 @@ const CreateSpot = ({ onSpotCreated }) => {
       return;
     }
 
+    setSuccessMessage(""); // Clear previous success message
     setIsUploading(true);
     const uploadedUrls = [];
 
-    for (const file of files) {
-      const formData = new FormData();
-      formData.append("file", file); // Append the file
-      formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET); // Append the upload preset
+    try {
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
 
-      try {
         const response = await axios.post(CLOUDINARY_URL, formData);
-        uploadedUrls.push(response.data.secure_url); // Save the secure URL from Cloudinary response
-        console.log(response.data.secure_url);
-      } catch (err) {
-        console.error("Error uploading image:", err);
-        alert("Image upload failed. Please try again.");
+        uploadedUrls.push(response.data.secure_url);
       }
-    }
 
-    setForm((prev) => ({ ...prev, images: uploadedUrls })); // Update form with uploaded image URLs
-    setIsUploading(false);
-    alert("Images uploaded successfully!");
+      setForm((prev) => ({ ...prev, images: uploadedUrls }));
+      setSuccessMessage("Images uploaded successfully!"); // Set new success message
+    } catch (err) {
+      console.error("Error uploading image:", err);
+      alert("Image upload failed. Please try again.");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const slides = form.images.map((url, index) => (
@@ -119,6 +121,7 @@ const CreateSpot = ({ onSpotCreated }) => {
     setFiles((prevFiles) =>
       prevFiles.filter((_, index) => index !== indexToRemove)
     );
+    setSuccessMessage(""); // Clear success message on delete
   };
 
   const handleSubmit = async () => {
@@ -280,7 +283,7 @@ const CreateSpot = ({ onSpotCreated }) => {
                   placeholder="Select images"
                   multiple
                   value={files}
-                  onChange={setFiles} 
+                  onChange={setFiles}
                   mt="md"
                   mb="lg"
                 />
@@ -295,7 +298,7 @@ const CreateSpot = ({ onSpotCreated }) => {
                       style={{
                         width: "110px",
                         height: "110px",
-                        position: "relative"
+                        position: "relative",
                       }}
                     >
                       <img
@@ -307,7 +310,7 @@ const CreateSpot = ({ onSpotCreated }) => {
                           objectFit: "cover",
                           overflow: "hidden",
                           borderRadius: "8px",
-                          boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)"
+                          boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
                         }}
                       />
                       <ActionIcon
@@ -315,7 +318,7 @@ const CreateSpot = ({ onSpotCreated }) => {
                         size="sm"
                         className="delete-icon"
                       >
-                        <IconX stroke={2} color="black" size={15}/>
+                        <IconX stroke={2} color="black" size={15} />
                       </ActionIcon>
                     </div>
                   ))}
@@ -333,6 +336,18 @@ const CreateSpot = ({ onSpotCreated }) => {
               >
                 Upload selected images
               </Button>
+
+              {/* Display Success Message */}
+              {successMessage && (
+                <div
+                  style={{
+                    marginTop: "1em",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {successMessage}
+                </div>
+              )}
             </div>
           </Stepper.Step>
 
