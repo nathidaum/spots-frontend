@@ -14,6 +14,10 @@ function ExplorePage() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
   const { isLoggedIn } = useContext(AuthContext);
 
+  const handleSpotCreated = (newSpot) => {
+    setSpots((prevSpots) => [newSpot, ...prevSpots]); // Add new spot to the top
+  };
+
   useEffect(() => {
     // Update isMobile on window resize
     const handleResize = () => {

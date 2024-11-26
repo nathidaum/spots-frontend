@@ -17,7 +17,7 @@ import {
 } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import { DatePickerInput } from "@mantine/dates";
-import { IconTrash } from "@tabler/icons-react";
+import { IconX } from "@tabler/icons-react";
 
 import "./createspot.css";
 import "../components/SpotCard/spotcard.css";
@@ -146,6 +146,7 @@ const CreateSpot = ({ onSpotCreated }) => {
         );
 
         if (onSpotCreated) onSpotCreated(response.data.spot);
+        if (handleSpotCreated) handleSpotCreated(response.data.spot);
         setForm({
           title: "",
           description: "",
@@ -173,7 +174,7 @@ const CreateSpot = ({ onSpotCreated }) => {
 
   return (
     <div className="page">
-      <Container size="xl" mt="xl" className="steps-container">
+      <div size="xl" mt="xl" className="steps-container">
         <Title order={2} align="center" mb="xl">
           Insert your spot 🫶
         </Title>
@@ -271,37 +272,32 @@ const CreateSpot = ({ onSpotCreated }) => {
             color="yellow"
             description="Add images for the spot"
           >
-            <FileInput
-              label="Upload Images"
-              placeholder="Select images"
-              multiple
-              value={files} // Store selected files
-              onChange={setFiles} // Update files state
-              mt="md"
-            />
-            {files.length > 0 && (
-              <>
-                <div
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "10px",
-                    marginTop: "10px",
-                  }}
-                >
+            <div className="image-upload-section">
+              {/* FileInput with a container */}
+              <div className="file-input-container">
+                <FileInput
+                  label="Upload Images"
+                  placeholder="Select images"
+                  multiple
+                  value={files}
+                  onChange={setFiles} 
+                  mt="md"
+                  mb="lg"
+                />
+              </div>
+
+              {/* Uploaded Images */}
+              {files.length > 0 && (
+                <div className="image-upload">
                   {files.map((file, index) => (
                     <div
                       key={index}
                       style={{
-                        width: "100px",
-                        height: "100px",
-                        position: "relative",
-                        overflow: "hidden",
-                        borderRadius: "8px",
-                        boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                        width: "110px",
+                        height: "110px",
+                        position: "relative"
                       }}
                     >
-                      {/* Image Thumbnail */}
                       <img
                         src={URL.createObjectURL(file)}
                         alt={`preview-${index}`}
@@ -309,32 +305,35 @@ const CreateSpot = ({ onSpotCreated }) => {
                           width: "100%",
                           height: "100%",
                           objectFit: "cover",
+                          overflow: "hidden",
                           borderRadius: "8px",
+                          boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)"
                         }}
                       />
-                      {/* Delete Button */}
                       <ActionIcon
                         onClick={() => handleDelete(index)}
-                        size="md"
-                        className="heart-icon"
+                        size="sm"
+                        className="delete-icon"
                       >
-                        <IconTrash color="orange" />
+                        <IconX stroke={2} color="black" size={15}/>
                       </ActionIcon>
                     </div>
                   ))}
                 </div>
-              </>
-            )}
-            <Button
-              onClick={handleUpload}
-              disabled={!files.length || isUploading}
-              loading={isUploading}
-              mt="md"
-              fullWidth
-              color="black"
-            >
-              Upload selected images
-            </Button>
+              )}
+
+              {/* Upload Button */}
+              <Button
+                onClick={handleUpload}
+                disabled={!files.length || isUploading}
+                loading={isUploading}
+                mt="lg"
+                fullWidth
+                color="grey"
+              >
+                Upload selected images
+              </Button>
+            </div>
           </Stepper.Step>
 
           {/* Step 3: Review & Save */}
@@ -398,7 +397,7 @@ const CreateSpot = ({ onSpotCreated }) => {
             {active === 2 ? "Save Spot" : "Next Step"}
           </Button>
         </Group>
-      </Container>
+      </div>
     </div>
   );
 };
