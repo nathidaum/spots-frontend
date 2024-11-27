@@ -1,0 +1,27 @@
+.bookingspage {
+  margin: 7em auto;
+  width: 60vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+}
+
+.booking-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5em;
+    width: 100%;
+}
+
+@media (max-width: 767px) {
+  .bookingspage {
+    margin: 2em auto 6em;
+    padding: 0em 1em;
+    width: 100%;
+  }
+  .booking-container {
+    flex-direction: column;
+  }
+}

@@ -1,14 +1,39 @@
 .bookingcard {
-  margin-bottom: 2em;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-start;
-  max-width: 20vw;
+  padding: 1em;
+  border-radius: 2em;
+  border: 1px solid rgb(219, 219, 219);
+  background-color:rgb(252, 247, 239);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.bookinginfo {
+  margin: 1em 0em 1em 2em;
+  width: 100%;
+  flex-grow: 1;
+}
+
+.booking-carousel-container {
+  position: relative;
+  border-radius: 1em; 
+  overflow: hidden; 
+  width: 50%;
 }
 
 @media (max-width: 767px) {
   .bookingcard {
     max-width: 100vw;
     margin-bottom: 0em;
+    flex-direction: column;
+  }
+  .bookinginfo {
+    margin: 1em;
+    width: 90%;
+    flex-grow: 1;
+  }
+  .booking-carousel-container {
+    width: 100%;
   }
 }

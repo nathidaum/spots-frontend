@@ -3,6 +3,7 @@ import axios from "axios";
 import BookingCard from "../components/BookingCard/BookingCard";
 import { Container, Skeleton, Title } from "@mantine/core";
 import "./explorepage.css";
+import "./bookingspage.css";
 
 function BookingsPage() {
   const [bookings, setBookings] = useState([]);
@@ -26,7 +27,9 @@ function BookingsPage() {
   useEffect(() => {
     axios
       .get("http://localhost:3000/bookings", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
       })
       .then((response) => {
         setBookings(response.data.bookings || []);
@@ -40,9 +43,9 @@ function BookingsPage() {
 
   return (
     <div>
-      <div className="explorepage">
-        <Title order={1} className="mobile-title" mb="lg">
-          Booked spots
+      <div className="bookingspage">
+        <Title order={1} mb="lg">
+          Your booked spots
         </Title>
 
         {/* Skeleton directly below the title */}
@@ -99,12 +102,10 @@ function BookingsPage() {
         )}
 
         {!isLoading && bookings.length > 0 && (
-          <div className="gallery-container">
-            <div className="spotslist">
-              {bookings.map((booking) => (
-                <BookingCard key={booking._id} booking={booking} />
-              ))}
-            </div>
+          <div className="booking-container">
+            {bookings.map((booking) => (
+              <BookingCard key={booking._id} booking={booking} />
+            ))}
           </div>
         )}
       </div>
