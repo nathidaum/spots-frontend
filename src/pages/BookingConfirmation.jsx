@@ -1,10 +1,10 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Text, Title, Button, Skeleton } from "@mantine/core";
+import { Text, Title, Skeleton } from "@mantine/core";
 
+import BookingCard from "../components/BookingCard/BookingCard";
 import "./bookingconfirmation.css";
-import SpotCard from "../components/SpotCard/SpotCard";
 
 function BookingConfirmation() {
   const { bookingId } = useParams(); // Get booking ID from route params
@@ -40,30 +40,13 @@ function BookingConfirmation() {
     return <Text color="red">Error: Unable to fetch booking details.</Text>;
   }
 
-  const spot = booking.spotId;
+  const { startDate, endDate, spotId: spot } = booking;
 
   return (
-      <div className="bookingconfirmationpage">
-        <Title order={1} m={0}>Booking confirmed!</Title>
-        <Text mt="sm" mb="xl">
-          Your booking from{" "}
-          <strong>
-            {new Intl.DateTimeFormat("en-GB", {
-              day: "numeric",
-              month: "long",
-            }).format(new Date(booking.startDate))}
-          </strong>{" "}
-          to{" "}
-          <strong>
-            {new Intl.DateTimeFormat("en-GB", {
-              day: "numeric",
-              month: "long",
-            }).format(new Date(booking.endDate))}
-          </strong>{" "}
-          has been confirmed.
-        </Text>
-        <SpotCard spot={spot} />
-      </div>
+    <div className="bookingconfirmationpage">
+      <Title order={1} mb="xl">Booking confirmed! 🎉</Title>
+      <BookingCard booking={booking} />
+    </div>
   );
 }
 
