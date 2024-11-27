@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
-import { Title } from "@mantine/core";
+import { Button, Text, Title } from "@mantine/core";
 
 import PageSkeleton from "../components/PageSkeleton";
 import SpotCard from "../components/SpotCard/SpotCard";
@@ -9,25 +10,10 @@ import "./favoritespage.css";
 
 function FavoritesPage() {
   const [favorites, setFavorites] = useState([]);
-  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
 
   useEffect(() => {
-    // Update isMobile on window resize
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 767);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup event listener
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
+    // Fetch favorites from the backend
     console.log("Fetching favorites...");
     axios
       .get("http://localhost:3000/users/favorites", {
@@ -36,13 +22,15 @@ function FavoritesPage() {
         },
       })
       .then((response) => {
-        console.log("Favorites fetched:", response.data.favorites);
         setFavorites(response.data.favorites || []);
         setIsLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching favorites:", error);
-        setError(error.response?.data?.message || "Failed to load favorites.");
+        console.error(
+          "Error fetching favorites:",
+          error.response?.data || error
+        );
+        setFavorites([]);
         setIsLoading(false);
       });
   }, []);
@@ -51,32 +39,30 @@ function FavoritesPage() {
     setFavorites((prev) => prev.filter((spot) => spot._id !== spotId));
   };
 
-  console.log("Loading state:", isLoading);
-
-  if (error) {
-    return <p>{error}</p>;
-  }
-
   return (
     <div className="favoritespage">
       <Title order={1} mb="lg">
         Your sweet spots ✨
       </Title>
 
-      {/* Skeleton directly below the title */}
-      {isLoading && (
+      {isLoading ? (
+        <PageSkeleton />
+      ) : favorites.length === 0 ? (
         <div>
-        <PageSkeleton/>
+          <Text mb="xl">
+            No sweet spots yet. Start exploring and save your favorites.
+          </Text>
+          <Button
+            variant="filled"
+            size="md"
+            color="yellow"
+            component={Link}
+            to="/"
+          >
+            Take me to the spots
+          </Button>
         </div>
-      )}
-
-      {/* Show Empty State */}
-      {!isLoading && favorites.length === 0 && (
-        <p>No favorites yet. Start exploring and save your favorites!</p>
-      )}
-
-      {/* Show Favorites */}
-      {!isLoading && favorites.length > 0 && (
+      ) : (
         <div className="gallery-container">
           <div className="spotslist">
             {favorites.map((spot) => (
