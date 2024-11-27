@@ -1,5 +1,5 @@
 .bookingconfirmationpage {
-    width: 100%;
+    width: 80vw;
     margin: 12em auto;
     display: flex;
     flex-direction: column;
@@ -9,6 +9,7 @@
 
 @media (max-width: 767px) {
     .bookingconfirmationpage  { 
+      width: 100vw; 
       margin: 0;
       padding: 3em 2em 4em;
       flex-direction: column;
