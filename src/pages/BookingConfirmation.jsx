@@ -40,8 +40,6 @@ function BookingConfirmation() {
     return <Text color="red">Error: Unable to fetch booking details.</Text>;
   }
 
-  const { startDate, endDate, spotId: spot } = booking;
-
   return (
     <div className="bookingconfirmationpage">
       <Title order={1} mb="xl">Booking confirmed! 🎉</Title>
