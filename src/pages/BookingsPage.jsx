@@ -3,7 +3,7 @@ import axios from "axios";
 import { Title } from "@mantine/core";
 
 import BookingCard from "../components/BookingCard/BookingCard";
-import PageSkeleton from "../components/Skeleton";
+import PageSkeleton from "../components/PageSkeleton";
 import "./explorepage.css";
 import "./bookingspage.css";
 

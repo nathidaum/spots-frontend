@@ -5,7 +5,7 @@ import { Title, Button } from "@mantine/core";
 
 import { AuthContext } from "../context/auth.context";
 import SpotCard from "../components/SpotCard/SpotCard";
-import PageSkeleton from "../components/Skeleton";
+import PageSkeleton from "../components/PageSkeleton";
 import "./explorepage.css";
 
 function ExplorePage() {
@@ -107,7 +107,7 @@ function ExplorePage() {
           component={Link}
           to={{
             pathname: "/spots/create",
-            state: { handleSpotCreated }, // Pass the function as state
+            state: { handleSpotCreated },
           }}
         >
           +

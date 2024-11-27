@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Title } from "@mantine/core";
 
-import PageSkeleton from "../components/Skeleton";
+import PageSkeleton from "../components/PageSkeleton";
 import SpotCard from "../components/SpotCard/SpotCard";
 import "./explorepage.css";
 import "./favoritespage.css";
