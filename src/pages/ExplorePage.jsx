@@ -12,26 +12,7 @@ function ExplorePage() {
   const [spots, setSpots] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 767);
   const { isLoggedIn } = useContext(AuthContext);
-
-  const handleSpotCreated = (newSpot) => {
-    setSpots((prevSpots) => [newSpot, ...prevSpots]); // Add new spot to the top
-  };
-
-  useEffect(() => {
-    // Update isMobile on window resize
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 767);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup event listener
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   useEffect(() => {
     // Fetch spots from the backend
@@ -46,6 +27,7 @@ function ExplorePage() {
         setIsLoading(false);
       });
 
+    // Fetch favorites for logged in users
     if (isLoggedIn) {
       const token = localStorage.getItem("authToken");
       if (token) {
@@ -56,14 +38,17 @@ function ExplorePage() {
           .then((response) => setFavorites(response.data.favorites || []))
           .catch((error) => {
             console.warn("Error fetching user favorites:", error.message);
-            // Optional: Clear token from localStorage if it's invalid
-            if (error.response?.status === 401) {
-              localStorage.removeItem("authToken");
-            }
           });
       }
     }
   }, [isLoggedIn]);
+
+  const toggleFavorite = (spotId) =>
+    setFavorites((prev) =>
+      prev.some((fav) => fav._id === spotId)
+        ? prev.filter((fav) => fav._id !== spotId)
+        : [...prev, spots.find((spot) => spot._id === spotId)]
+    );
 
   return (
     <div className="explorepage">
@@ -71,12 +56,7 @@ function ExplorePage() {
         Discover spots
       </Title>
 
-      {/* Skeleton directly below the title */}
-      {isLoading && isMobile && (
-        <div>
-        <PageSkeleton/>
-        </div>
-      )}
+      {isLoading && <PageSkeleton />}
 
       {/* Show spots once loaded */}
       {!isLoading && (
@@ -86,14 +66,8 @@ function ExplorePage() {
               <SpotCard
                 key={spot._id}
                 spot={spot}
-                isFavorite={favorites.some((fav) => fav._id === spot._id)} // Dynamically check favorites
-                onFavoriteToggle={() => {
-                  setFavorites((prev) =>
-                    prev.some((fav) => fav._id === spot._id)
-                      ? prev.filter((fav) => fav._id !== spot._id) // Remove if already in favorites
-                      : [spot, ...prev]
-                  );
-                }}
+                isFavorite={favorites.some((fav) => fav._id === spot._id)}
+                onFavoriteToggle={() => toggleFavorite(spot._id)}
               />
             ))}
           </div>
@@ -102,14 +76,7 @@ function ExplorePage() {
 
       {/* Floating button for creating a new spot */}
       {isLoggedIn && (
-        <Button
-          className="floating-button"
-          component={Link}
-          to={{
-            pathname: "/spots/create",
-            state: { handleSpotCreated },
-          }}
-        >
+        <Button className="floating-button" component={Link} to="/spots/create">
           +
         </Button>
       )}
