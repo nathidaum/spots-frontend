@@ -1,11 +1,12 @@
 import { useState, useEffect, useContext } from "react";
-import axios from "axios";
-import { Container, Skeleton, Title, Button } from "@mantine/core";
-import SpotCard from "../components/SpotCard/SpotCard";
 import { Link } from "react-router-dom";
-import "./explorepage.css";
+import axios from "axios";
+import { Title, Button } from "@mantine/core";
 
 import { AuthContext } from "../context/auth.context";
+import SpotCard from "../components/SpotCard/SpotCard";
+import PageSkeleton from "../components/Skeleton";
+import "./explorepage.css";
 
 function ExplorePage() {
   const [spots, setSpots] = useState([]);
@@ -73,42 +74,7 @@ function ExplorePage() {
       {/* Skeleton directly below the title */}
       {isLoading && isMobile && (
         <div>
-          {Array.from({ length: 4 }).map((_, index) => (
-            <Container key={index} px={0} style={{ margin: 0 }}>
-              <Skeleton
-                height={240}
-                radius="lg"
-                mb="lg"
-                style={{
-                  width: "100%",
-                }}
-              />
-              <Skeleton
-                height={15}
-                radius="md"
-                mb="sm"
-                style={{
-                  width: "80%",
-                }}
-              />
-              <Skeleton
-                height={10}
-                radius="md"
-                mb="sm"
-                style={{
-                  width: "70%",
-                }}
-              />
-              <Skeleton
-                height={10}
-                radius="md"
-                mb="sm"
-                style={{
-                  width: "20%",
-                }}
-              />
-            </Container>
-          ))}
+        <PageSkeleton/>
         </div>
       )}
 

@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Title } from "@mantine/core";
+
 import BookingCard from "../components/BookingCard/BookingCard";
-import { Container, Skeleton, Title } from "@mantine/core";
+import PageSkeleton from "../components/Skeleton";
 import "./explorepage.css";
 import "./bookingspage.css";
 
@@ -50,51 +52,9 @@ function BookingsPage() {
 
         {/* Skeleton directly below the title */}
         {isLoading && (
-          <div>
-            {Array.from({ length: 4 }).map((_, index) => (
-              <Container
-                key={index}
-                px={0}
-                style={{
-                  margin: 0,
-                  display: isMobile ? "block" : "none", // Show skeletons only on mobile
-                }}
-              >
-                <Skeleton
-                  height={240}
-                  radius="lg"
-                  mb="lg"
-                  style={{
-                    width: "100%",
-                  }}
-                />
-                <Skeleton
-                  height={15}
-                  radius="md"
-                  mb="sm"
-                  style={{
-                    width: "80%",
-                  }}
-                />
-                <Skeleton
-                  height={10}
-                  radius="md"
-                  mb="sm"
-                  style={{
-                    width: "70%",
-                  }}
-                />
-                <Skeleton
-                  height={10}
-                  radius="md"
-                  mb="sm"
-                  style={{
-                    width: "20%",
-                  }}
-                />
-              </Container>
-            ))}
-          </div>
+        <div>
+        <PageSkeleton/>
+        </div>
         )}
 
         {!isLoading && bookings.length === 0 && (
