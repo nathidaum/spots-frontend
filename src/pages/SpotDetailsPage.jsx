@@ -5,6 +5,7 @@ import {
   Text,
   Title,
   Button,
+  Divider,
   List,
   ThemeIcon,
   Skeleton,
@@ -13,7 +14,7 @@ import {
   Group,
 } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
-import { DateInput } from '@mantine/dates';
+import { DateInput } from "@mantine/dates";
 import { modals } from "@mantine/modals";
 import {
   IconArrowLeft,
@@ -106,6 +107,30 @@ function SpotDetailsPage() {
       console.error("Server Response:", error.response?.data);
     }
   };
+
+  // Calculate total price
+  const totalPrice = useMemo(() => {
+    if (!spot || !startDate || !endDate) return 0; // Check if spot is loaded
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // Calculate the difference in days (inclusive)
+    const diffInDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+
+    return diffInDays * spot.price; // Total price
+  }, [startDate, endDate, spot]);
+
+  // Calculate total price
+  const numberOfDays = useMemo(() => {
+    if (!spot || !startDate || !endDate) return 0; // Check if spot is loaded
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // Calculate the difference in days (inclusive)
+    const numberOfDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+
+    return numberOfDays;
+  }, [startDate, endDate, spot]);
 
   const openDeleteModal = () => {
     setIsModalOpen(true); // Track modal open state
@@ -224,14 +249,15 @@ function SpotDetailsPage() {
           ))}
         </Carousel>
       </div>
+
       <section className="detailed-content">
-        <Flex direction="column" mt="md">
+        <div className="left-content">
           <Title order={1}>{spot.title}</Title>
           <Text size="sm" c="dimmed" mt="sm">
             📍 {spot.location.city}, {spot.location.address}
           </Text>
           <Text mt="md">{spot.description}</Text>
-          <Title order={2} mt="lg" mb="sm">
+          <Title order={3} mt="lg" mb="md">
             Amenities
           </Title>
           <List
@@ -247,7 +273,9 @@ function SpotDetailsPage() {
             ))}
           </List>
           <br />
-          <Title order={3}>About the Host</Title>
+          <Title order={3} mb="md">
+            About the Host
+          </Title>
           <Text>
             {spot.createdBy.firstName} {spot.createdBy.lastName}
           </Text>
@@ -256,10 +284,14 @@ function SpotDetailsPage() {
               Company: <strong>{spot.createdBy.company}</strong>
             </Text>
           )}
-          <Title order={2} mt="lg" mb="sm">
-            Book this Spot
-          </Title>
+        </div>
+
+        <div className="date-selection-mobile">
+          <Title order={3}>Select dates</Title>
           <DateInput
+            mt="lg"
+            mb="lg"
+            radius={10}
             value={startDate}
             onChange={(date) => {
               setStartDate(date);
@@ -281,8 +313,8 @@ function SpotDetailsPage() {
               }),
             }}
           />
-
           <DateInput
+            radius={10}
             value={endDate}
             onChange={setEndDate}
             placeholder="End Date"
@@ -301,23 +333,123 @@ function SpotDetailsPage() {
               }),
             }}
           />
-        </Flex>
+        </div>
+
+        <div className="booking-box">
+          <Title size="md" mt="ld" mb="lg">
+            <span className="priceperday">{spot.price}</span> € / day
+          </Title>
+          <div className="date-selection-desktop">
+            <DateInput
+              mr={10}
+              radius={10}
+              value={startDate}
+              onChange={(date) => {
+                setStartDate(date);
+                if (endDate && date > endDate) setEndDate(null); // Reset end date if invalid
+              }}
+              placeholder="Start Date"
+              minDate={new Date()}
+              excludeDate={excludeDate}
+              label="Start Date"
+              withAsterisk
+              styles={{
+                input: {
+                  backgroundColor: "white",
+                },
+                day: (date, modifiers) => ({
+                  backgroundColor: modifiers.disabled ? "#f0f0f0" : undefined,
+                  color: modifiers.disabled ? "#b0b0b0" : undefined,
+                  pointerEvents: modifiers.disabled ? "none" : undefined,
+                }),
+              }}
+            />
+            <DateInput
+              mr={10}
+              radius={10}
+              value={endDate}
+              onChange={setEndDate}
+              placeholder="End Date"
+              minDate={startDate || new Date()} // End date must be after start date
+              excludeDate={excludeDate}
+              label="End Date"
+              withAsterisk
+              styles={{
+                input: {
+                  backgroundColor: "white",
+                },
+                day: (modifiers) => ({
+                  backgroundColor: modifiers.disabled ? "#f0f0f0" : undefined,
+                  color: modifiers.disabled ? "#b0b0b0" : undefined,
+                  pointerEvents: modifiers.disabled ? "none" : undefined,
+                }),
+              }}
+            />
+          </div>
+          {startDate && endDate && (
+            <>
+              <Divider my="md" />
+              <div className="price-calc">
+                <Text fw={400} size="md" mt="sm" c="grey">
+                  {spot.price}€ x {numberOfDays} days
+                </Text>
+                <Text fw={800} size="lg" mt="sm" c="black">
+                  {totalPrice}€
+                </Text>
+              </div>
+            </>
+          )}
+          <Button
+            color="yellow"
+            size="md"
+            mt="lg"
+            className="desktop-booking-button"
+            onClick={handleBookingSubmit}
+            disabled={!startDate || !endDate}
+          >
+            Book
+          </Button>
+        </div>
       </section>
-      <Button
-        color="yellow"
-        size="md"
-        className="desktop-booking-button"
-        onClick={handleBookingSubmit}
-      >
-        Book
-      </Button>
+
       <div className="sticky-footer">
         <div className="price-info">
-          <Text fw={600} size="lg">
-            €{spot.price} / day
-          </Text>
+          {spot && (
+            <>
+              {(!startDate || !endDate) && (
+                <Text fw={600} size="lg">
+                  {spot.price} € / day
+                </Text>
+              )}
+
+              {startDate && endDate && (
+                <>
+                  <Text fw={600} size="lg">
+                    {totalPrice}€
+                  </Text>
+                  <Text size="sm" color="dimmed">
+                    {`${new Intl.DateTimeFormat("en-GB", {
+                      day: "numeric",
+                      month: "short",
+                    }).format(startDate)} to ${new Intl.DateTimeFormat(
+                      "en-GB",
+                      {
+                        day: "numeric",
+                        month: "short",
+                      }
+                    ).format(endDate)}`}
+                  </Text>
+                </>
+              )}
+            </>
+          )}
         </div>
-        <Button color="yellow" size="lg" onClick={handleBookingSubmit}>
+        <Button
+          color="yellow"
+          size="lg"
+          onClick={handleBookingSubmit}
+          disabled={!startDate || !endDate}
+        >
           Book
         </Button>
       </div>

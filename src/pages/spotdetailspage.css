@@ -20,13 +20,17 @@
   width: 100%;
 }
 
-.sticky-footer {
-  display: none;
-}
-
 .detailed-content {
   padding: 1em 2em;
-  width: 90%
+  width: 90%;
+  display: flex;
+  justify-content: space-between
+}
+
+.left-content {
+  display: flex; 
+  flex-direction: column; 
+  margin-top: 2em;
 }
 
 .arrowback-icon {
@@ -86,6 +90,46 @@
   background-color: orange;
 }
 
+.date-selection-desktop {
+  display: flex;
+  justify-content: space-between;
+}
+
+.date-selection-mobile {
+  display: none;
+}
+.sticky-footer {
+  display: none;
+}
+
+.booking-box {
+  margin: 2em 0em; 
+  padding: 2em;
+  border-radius: 1em; 
+  box-shadow: 0 2px 4px rgba(186, 183, 183, 0.6);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: fit-content
+}
+
+.left-content {
+  margin-right: 2em;
+  margin-bottom: 2em;
+}
+
+.priceperday {
+  font-size: 2em; 
+  font-weight: 800;
+}
+
+.price-calc {
+  display: flex; 
+  justify-content: space-between;
+  align-items: space-between;
+  width: 100%;
+}
 
 @media (max-width: 768px) {
   .sticky-footer {
@@ -103,14 +147,15 @@
   }
   .sticky-footer {
     display: flex;
-    align-items: space-between;
+    justify-content: space-between;
+    align-items: center;
     gap: 2em;
   }
 
   .price-info {
     display: flex;
     flex-direction: column; 
-    justify-content: flex-start
+    justify-content: flex-start;
   }
 
   .detailspage {
@@ -125,10 +170,24 @@
     margin: 0em 0em 4em;
     padding: 0;
     display: flex; 
+    flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
   }
   .desktop-booking-button {
     display: none;
+  }
+
+  .left-content {
+    margin-right: 0em;
+  }
+  .booking-box {
+    display: none;
+  }
+  .date-selection-mobile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%
   }
 }
