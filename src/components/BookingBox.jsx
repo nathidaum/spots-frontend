@@ -1,4 +1,5 @@
-import { DateInput, Button, Text, Title, Divider } from "@mantine/core";
+import { Button, Divider, Text, Title } from "@mantine/core";
+import { DateInput } from "@mantine/dates";
 import "./SpotCard/spotcard.css";
 import "../pages/spotdetailspage.css";
 
