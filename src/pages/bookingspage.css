@@ -1,6 +1,6 @@
 .bookingspage {
   margin: 7em auto;
-  width: 60vw;
+  width: 80vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -19,7 +19,7 @@
   .bookingspage {
     margin: 2em auto 6em;
     padding: 0em 1em;
-    width: 100%;
+    width: 100vw;
   }
   .booking-container {
     flex-direction: column;

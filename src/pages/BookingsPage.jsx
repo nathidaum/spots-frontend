@@ -45,7 +45,7 @@ function BookingsPage() {
     <div>
       <div className="bookingspage">
         <Title order={1} mb="lg">
-          Your booked spots
+          Your booked spots 🤝
         </Title>
 
         {/* Skeleton directly below the title */}

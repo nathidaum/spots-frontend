@@ -5,7 +5,6 @@ import { Badge, Image, Text, Title } from "@mantine/core";
 import "./bookingcard.css";
 import "../SpotCard/spotcard.css";
 
-
 const BookingCard = ({ booking }) => {
   // Check if `spotId` and its `images` exist
   if (
@@ -49,10 +48,6 @@ const BookingCard = ({ booking }) => {
   ));
 
   return (
-    <Link
-      to={`/spots/${booking.spotId._id}`} // Redirect to the spot details page
-      style={{ textDecoration: "none", color: "inherit" }} // Ensure link styling doesn't affect layout
-    >
     <div className="bookingcard">
       <div className="booking-carousel-container">
         <Badge variant="default" color="yellow" className="desk-badge">
@@ -63,35 +58,39 @@ const BookingCard = ({ booking }) => {
         </Carousel>
       </div>
 
-      <div className="bookinginfo">
-        <Title order={2} mb="xl">
-          📆{" "}
-          {new Intl.DateTimeFormat("en-GB", {
-            day: "numeric",
-            month: "long",
-          }).format(new Date(booking.startDate))}{" "}
-          -{" "}
-          {new Intl.DateTimeFormat("en-GB", {
-            day: "numeric",
-            month: "long",
-          }).format(new Date(booking.endDate))}
-        </Title>
-        <Text size="lg" fw={600}>
-          {booking.spotId.title || "No title available"}
-        </Text>
-        <Text size="lg" mb="lg">
-          📍 {booking.spotId.location?.address || "No address available"},{" "}
-          {booking.spotId.location?.city || "No city available"}
-        </Text>
-        <Text size="lg">
-          {booking.spotId.price || 0}€ x {numberOfDays} days
-        </Text>
-        <Text size="lg" fw={600}>
-          Total: {totalPrice}€
-        </Text>
-      </div>
+      <Link
+        to={`/spots/${booking.spotId._id}`} // Redirect to the spot details page
+        style={{ textDecoration: "none", color: "inherit" }} // Ensure link styling doesn't affect layout
+      >
+        <div className="bookinginfo">
+          <Title order={2} mb="xl">
+            📆{" "}
+            {new Intl.DateTimeFormat("en-GB", {
+              day: "numeric",
+              month: "long",
+            }).format(new Date(booking.startDate))}{" "}
+            -{" "}
+            {new Intl.DateTimeFormat("en-GB", {
+              day: "numeric",
+              month: "long",
+            }).format(new Date(booking.endDate))}
+          </Title>
+          <Text size="lg" fw={600}>
+            {booking.spotId.title || "No title available"}
+          </Text>
+          <Text size="lg" mb="lg">
+            📍 {booking.spotId.location?.address || "No address available"},{" "}
+            {booking.spotId.location?.city || "No city available"}
+          </Text>
+          <Text size="lg">
+            {booking.spotId.price || 0}€ x {numberOfDays} days
+          </Text>
+          <Text size="lg" fw={600}>
+            Total: {totalPrice}€
+          </Text>
+        </div>
+      </Link>
     </div>
-    </Link>
   );
 };
 
