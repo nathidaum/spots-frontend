@@ -1,5 +1,5 @@
 import { Button, Text } from "@mantine/core";
-import "./Spotcard/spotcard.css";
+import "./SpotCard/spotcard.css";
 import "../pages/spotdetailspage.css";
 
 const StickyBookingFooter = ({
