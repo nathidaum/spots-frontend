@@ -17,7 +17,7 @@ function ExplorePage() {
   useEffect(() => {
     // Fetch spots from the backend
     axios
-      .get("http://localhost:3000/spots")
+      .get(`${import.meta.env.VITE_API_URL}/spots`)
       .then((response) => {
         setSpots(response.data.spots);
         setIsLoading(false);
@@ -32,7 +32,7 @@ function ExplorePage() {
       const token = localStorage.getItem("authToken");
       if (token) {
         axios
-          .get("http://localhost:3000/users/favorites", {
+          .get(`${import.meta.env.VITE_API_URL}/users/favorites`, {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then((response) => setFavorites(response.data.favorites || []))

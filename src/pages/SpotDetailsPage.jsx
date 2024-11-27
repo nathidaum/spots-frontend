@@ -39,7 +39,7 @@ function SpotDetailsPage() {
     if (!id) return;
 
     axios
-      .get(`http://localhost:3000/spots/${id}`)
+      .get(`${import.meta.env.VITE_API_URL}/spots/${id}`)
       .then((response) => {
         const { spot } = response.data;
         setSpot(spot);
@@ -96,7 +96,7 @@ function SpotDetailsPage() {
       const token = localStorage.getItem("authToken");
 
       const response = await axios.post(
-        "http://localhost:3000/bookings",
+        `${import.meta.env.VITE_API_URL}/bookings`,
         { spotId: id, startDate, endDate },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -131,7 +131,7 @@ function SpotDetailsPage() {
       onConfirm: async () => {
         try {
           const token = localStorage.getItem("authToken");
-          await axios.delete(`http://localhost:3000/spots/${id}`, {
+          await axios.delete(`${import.meta.env.VITE_API_URL}/spots/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           navigate("/");
@@ -219,7 +219,7 @@ function SpotDetailsPage() {
               input: {
                 backgroundColor: "white",
               },
-              day: (modifiers) => ({
+              day: (date, modifiers) => ({
                 backgroundColor: modifiers.disabled ? "#f0f0f0" : undefined,
                 color: modifiers.disabled ? "#b0b0b0" : undefined,
                 pointerEvents: modifiers.disabled ? "none" : undefined,

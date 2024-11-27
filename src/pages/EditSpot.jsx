@@ -57,7 +57,7 @@ const EditSpot = () => {
     const fetchSpot = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/spots/${spotId}`
+          `${import.meta.env.VITE_API_URL}/spots/${spotId}`
         );
         const data = response.data;
         console.log("Fetched spot data:", response.data.spot);
@@ -163,7 +163,7 @@ const EditSpot = () => {
         ],
       };
 
-      await axios.put(`http://localhost:3000/spots/${spotId}`, updatedData, {
+      await axios.put(`${import.meta.env.VITE_API_URL}/spots/${spotId}`, updatedData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
@@ -241,23 +241,8 @@ const EditSpot = () => {
           value={form.amenities}
           onChange={(value) => handleInputChange("amenities", value)}
           mt="md"
+          mb="xl"
         />
-        <Group grow mt="md">
-          <DatePickerInput
-            dropdownType="modal"
-            label="Start Date"
-            value={form.availability.startDate}
-            onChange={(value) => handleAvailabilityChange("startDate", value)}
-            mb="lg"
-          />
-          <DatePickerInput
-            dropdownType="modal"
-            label="End Date"
-            value={form.availability.endDate}
-            onChange={(value) => handleAvailabilityChange("endDate", value)}
-            mb="lg"
-          />
-        </Group>
 
         {form.images.length > 0 && (
           <Carousel withIndicators height={300} loop align="center">

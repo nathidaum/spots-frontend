@@ -141,7 +141,7 @@ const CreateSpot = ({ onSpotCreated }) => {
 
         const token = localStorage.getItem("authToken");
         const response = await axios.post(
-          "http://localhost:3000/spots",
+          `${import.meta.env.VITE_API_URL}/spots`,
           formattedForm,
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -149,7 +149,7 @@ const CreateSpot = ({ onSpotCreated }) => {
         );
 
         if (onSpotCreated) onSpotCreated(response.data.spot);
-        if (handleSpotCreated) handleSpotCreated(response.data.spot);
+
         setForm({
           title: "",
           description: "",
@@ -248,25 +248,6 @@ const CreateSpot = ({ onSpotCreated }) => {
               onChange={(value) => handleInputChange("amenities", value)}
               mt="md"
             />
-
-            <Group grow mt="md">
-              <DatePickerInput
-                dropdownType="modal"
-                label="Start Date"
-                placeholder="Pick start date"
-                value={form.availability.startDate}
-                onChange={(value) =>
-                  handleAvailabilityChange("startDate", value)
-                }
-              />
-              <DatePickerInput
-                dropdownType="modal"
-                label="End Date"
-                placeholder="Pick end date"
-                value={form.availability.endDate}
-                onChange={(value) => handleAvailabilityChange("endDate", value)}
-              />
-            </Group>
           </Stepper.Step>
 
           {/* Step 2: Upload Images */}

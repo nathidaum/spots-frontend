@@ -15,7 +15,7 @@ function BookingsPage() {
   useEffect(() => {
     // Fetch bookings from the backend
     axios
-      .get("http://localhost:3000/bookings", {
+      .get(`${import.meta.env.VITE_API_URL}/bookings`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },

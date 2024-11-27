@@ -16,7 +16,7 @@ function FavoritesPage() {
     // Fetch favorites from the backend
     console.log("Fetching favorites...");
     axios
-      .get("http://localhost:3000/users/favorites", {
+      .get(`${import.meta.env.VITE_API_URL}/users/favorites`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },

@@ -14,7 +14,7 @@ function BookingConfirmation() {
   useEffect(() => {
     // Fetch the booking details by ID
     axios
-      .get(`http://localhost:3000/bookings/${bookingId}`, {
+      .get(`${import.meta.env.VITE_API_URL}/bookings/${bookingId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
