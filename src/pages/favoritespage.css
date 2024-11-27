@@ -1,5 +1,6 @@
 .favoritespage {
-  margin: 7em 2em 2em;
+  margin: 7em auto 2em;
+  max-width: 80vw;
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -12,6 +13,7 @@
   @media (max-width: 767px) {
     .favoritespage {
       margin: 2em 1em 6em;
+      max-width: 100vw;
     }
     .mobile-title {
       display: block

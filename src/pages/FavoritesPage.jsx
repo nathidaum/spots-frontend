@@ -57,8 +57,8 @@ function FavoritesPage() {
 
   return (
     <div className="favoritespage">
-      <Title order={1} className="mobile-title" mb="lg">
-        Your sweet spots
+      <Title order={1} mb="lg">
+        Your sweet spots ✨
       </Title>
 
       {/* Skeleton directly below the title */}

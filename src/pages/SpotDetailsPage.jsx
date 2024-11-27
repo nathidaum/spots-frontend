@@ -135,10 +135,10 @@ function SpotDetailsPage() {
   const openDeleteModal = () => {
     setIsModalOpen(true); // Track modal open state
     modals.openConfirmModal({
-      title: "Delete this spot 🗑️",
+      title: <Title size="lg"mt="lg">Delete this spot 🗑️</Title>,
       centered: true,
       children: (
-        <Text size="sm">
+        <Text size="sm" mr="md">
           Are you sure you want to delete this spot? This action cannot be
           reverted. 😢
         </Text>

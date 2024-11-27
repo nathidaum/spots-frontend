@@ -4,20 +4,20 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 55vw;
+  width: 80vw;
 }
 
 .detailed-carousel-container {
   position: relative;
-  border-radius: 0em; 
+  border-radius: 0em;
   overflow: hidden;
-  width: 100%
+  width: 100%;
 }
 
 .skeleton-detailed-page {
   margin: 0;
   left: 0;
-  right: 0; 
+  right: 0;
   width: 100%;
 }
 
@@ -25,12 +25,12 @@
   padding: 1em 2em;
   width: 100%;
   display: flex;
-  justify-content: space-between
+  justify-content: space-between;
 }
 
 .left-content {
-  display: flex; 
-  flex-direction: column; 
+  display: flex;
+  flex-direction: column;
   margin-top: 2em;
 }
 
@@ -38,7 +38,7 @@
   position: absolute;
   top: 10px;
   left: 10px;
-  z-index: 1001;
+  z-index: 499;
   background-color: white;
   border-radius: 50%;
   display: flex;
@@ -57,7 +57,7 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  z-index: 1001;
+  z-index: 499;
   background-color: white;
   border-radius: 50%;
   display: flex;
@@ -76,7 +76,7 @@
   position: absolute;
   top: 10px;
   right: 70px;
-  z-index: 1001;
+  z-index: 499;
   background-color: white;
   border-radius: 50%;
   display: flex;
@@ -104,14 +104,14 @@
 }
 
 .booking-box {
-  margin: 2em 0em; 
+  margin: 2em 0em;
   padding: 2em;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   max-width: 50%;
   height: fit-content;
-  border-radius: 1em; 
+  border-radius: 1em;
   box-shadow: 0 2px 4px rgba(186, 183, 183, 0.6);
 }
 
@@ -122,12 +122,12 @@
 }
 
 .priceperday {
-  font-size: 2em; 
+  font-size: 2em;
   font-weight: 800;
 }
 
 .price-calc {
-  display: flex; 
+  display: flex;
   justify-content: space-between;
   align-items: space-between;
   width: 100%;
@@ -156,7 +156,7 @@
 
   .price-info {
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     justify-content: flex-start;
   }
 
@@ -171,7 +171,7 @@
   .detailed-content {
     margin: 0em 0em 4em;
     padding: 1em 2em;
-    display: flex; 
+    display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
@@ -190,6 +190,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 100%
+    width: 100%;
   }
 }
