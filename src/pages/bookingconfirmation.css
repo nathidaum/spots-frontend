@@ -1,0 +1,17 @@
+.bookingconfirmationpage {
+    width: 100%;
+    margin: 12em auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 767px) {
+    .bookingconfirmationpage  { 
+      margin: 0;
+      padding: 10em 2em;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
