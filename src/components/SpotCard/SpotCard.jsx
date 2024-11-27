@@ -1,26 +1,24 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import "@mantine/carousel/styles.css";
+import { ActionIcon, Badge, Box, Image, Notification } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
-import { Image, ActionIcon, Notification, Box, Badge } from "@mantine/core";
+import "@mantine/carousel/styles.css";
 import {
+  IconAlertCircle,
   IconHeart,
   IconHeartFilled,
-  IconAlertCircle,
 } from "@tabler/icons-react";
 
-import "./spotcard.css";
 import authService from "../../services/auth.service";
+import "./spotcard.css";
 
 const SpotCard = ({ spot, isFavorite, onFavoriteToggle }) => {
   // Inside SpotCard component
   const [liked, setLiked] = useState(isFavorite); // Initial favorite state
   const [showNotification, setShowNotification] = useState(false);
 
-  // Add an effect to update `liked` when `isFavorite` changes
-  useEffect(() => {
-    setLiked(isFavorite);
-  }, [isFavorite]);
+  // Sync `liked` state with `isFavorite` prop
+  useEffect(() => setLiked(isFavorite), [isFavorite]);
 
   const handleLikeToggle = (e) => {
     e.stopPropagation(); // Prevent navigation
@@ -33,13 +31,13 @@ const SpotCard = ({ spot, isFavorite, onFavoriteToggle }) => {
     }
 
     authService
-      .toggleFavorite(spot._id)
-      .then(() => {
-        setLiked((prev) => !prev);
-        if (onFavoriteToggle) onFavoriteToggle(spot._id); // Notify parent
-      })
-      .catch((error) => console.error("Error toggling favorite:", error));
-  };
+    .toggleFavorite(spot._id)
+    .then(() => {
+      setLiked((prev) => !prev);
+      onFavoriteToggle?.(spot._id); // Notify parent
+    })
+    .catch((error) => console.error("Error toggling favorite:", error));
+};
 
   const slides = spot.images.map((url, index) => (
     <Carousel.Slide key={index}>
@@ -59,7 +57,6 @@ const SpotCard = ({ spot, isFavorite, onFavoriteToggle }) => {
         </Badge>
         <Carousel
           withIndicators
-          // withControls={false}
           controlSize={24}
           onMouseDown={(e) => e.stopPropagation()}
           loop

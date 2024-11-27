@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
-import { Title } from "@mantine/core";
+import { Button, Text, Title } from "@mantine/core";
 
 import BookingCard from "../components/BookingCard/BookingCard";
 import PageSkeleton from "../components/PageSkeleton";
@@ -39,7 +40,20 @@ function BookingsPage() {
       {isLoading ? (
         <PageSkeleton />
       ) : bookings.length === 0 ? (
-        <p>You currently have no bookings.</p>
+        <div>
+          <Text mb="xl">
+            You don't have bookings yet. Time to spot your spot!
+          </Text>
+          <Button
+            variant="filled"
+            size="md"
+            color="yellow"
+            component={Link}
+            to="/"
+          >
+            Take me to the spots
+          </Button>
+        </div>
       ) : (
         <div className="booking-container">
           {bookings.map((booking) => (
