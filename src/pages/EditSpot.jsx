@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import {
-  Stepper,
   Button,
   Group,
   TextInput,
@@ -11,14 +10,14 @@ import {
   NumberInput,
   Container,
   Text,
-  Badge,
   Title,
   FileInput,
   ActionIcon,
 } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
-import { DatePickerInput } from "@mantine/dates";
 import { IconTrash } from "@tabler/icons-react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import "./editspot.css";
 import "../components/SpotCard/spotcard.css";
@@ -103,16 +102,15 @@ const EditSpot = () => {
     setForm({ ...form, location: { ...form.location, [field]: value } });
   };
 
-  const handleAvailabilityChange = (field, value) => {
-    setForm((prev) => ({
-      ...prev,
-      availability: { ...prev.availability, [field]: value },
-    }));
-  };
-
   const handleUpload = async () => {
     if (!files.length) {
-      alert("Please select images to upload.");
+      toast.error("Please select images to upload. 📸", {
+        icon: false,
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: { backgroundColor: "#1C1C1C", color: "white" },
+      });
       return;
     }
 
@@ -135,7 +133,13 @@ const EditSpot = () => {
         uploadedUrls.push(response.data.secure_url);
       } catch (err) {
         console.error("Error uploading image:", err);
-        alert("Image upload failed.");
+        toast.error("Image upload failed. Please try again. 🙏", {
+          icon: false,
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: true,
+          style: { backgroundColor: "#1C1C1C", color: "white" },
+        });
       }
     }
 
@@ -169,11 +173,23 @@ const EditSpot = () => {
         },
       });
 
-      alert("Spot updated successfully!");
+      toast.success("Successfully updated! 🤩", {
+        icon: false,
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: { backgroundColor: "#1C1C1C", color: "white" },
+      });
       navigate(`/spots/${spotId}`);
     } catch (err) {
       console.error("Error updating spot:", err);
-      alert("Failed to update spot.");
+      toast.error("Updating this spot failed. 😵‍💫", {
+        icon: false,
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        style: { backgroundColor: "#1C1C1C", color: "white" },
+      });
     } finally {
       setIsSubmitting(false);
     }
