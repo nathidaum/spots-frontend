@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Text, Title, Skeleton } from "@mantine/core";
+import confetti from "canvas-confetti";
 
 import BookingCard from "../components/BookingCard/BookingCard";
 import "./bookingconfirmation.css";
@@ -22,6 +23,15 @@ function BookingConfirmation() {
       .then((response) => {
         setBooking(response.data.booking);
         setIsLoading(false);
+
+        // Trigger confetti when booking is successfully fetched
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.8 },
+          colors: ["#FFA500", "#FF8C00", "#7F00FF", "#ADD8E6"],
+          shapes: ["circle"],
+        });
       })
       .catch((error) => {
         console.error(

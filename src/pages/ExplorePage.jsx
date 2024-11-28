@@ -162,7 +162,7 @@ function ExplorePage() {
             Max. Price / Day [€]
           </Text>
           <Slider
-            value={maxPriceFilter || 0} // Default to 0 if null
+            value={maxPriceFilter || 100} // Default to 0 if null
             onChange={setMaxPriceFilter}
             min={1}
             max={400}
