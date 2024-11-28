@@ -18,18 +18,19 @@ import { Carousel } from "@mantine/carousel";
 import { IconX } from "@tabler/icons-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import confetti from "canvas-confetti";
 
 import "./createspot.css";
 import "../components/SpotCard/spotcard.css";
 
 const amenitiesOptions = [
-  "Wifi",
-  "Parking",
   "Coffee",
-  "Lift",
-  "Phonebox",
-  "Meeting Room",
   "Kitchen",
+  "Lift",
+  "Meeting Room",
+  "Parking",
+  "Phonebox",
+  "Wifi",
 ];
 
 const CreateSpot = ({ onSpotCreated }) => {
@@ -49,7 +50,6 @@ const CreateSpot = ({ onSpotCreated }) => {
   const navigate = useNavigate();
   const [files, setFiles] = useState([]); // Define state for selected files
   const [isUploading, setIsUploading] = useState(false); // State for upload status
-  const [successMessage, setSuccessMessage] = useState(""); // New state for success feedback
 
   const handleInputChange = (field, value) => {
     setForm({ ...form, [field]: value });
@@ -57,6 +57,27 @@ const CreateSpot = ({ onSpotCreated }) => {
 
   const handleLocationChange = (field, value) => {
     setForm({ ...form, location: { ...form.location, [field]: value } });
+  };
+
+  const isStep1Complete = () => {
+    const { title, description, location, deskCount, price, amenities } = form;
+    return (
+      title.trim() !== "" &&
+      description.trim() !== "" &&
+      location.city.trim() !== "" &&
+      location.address.trim() !== "" &&
+      deskCount > 0 &&
+      price > 0 &&
+      amenities.length > 0
+    );
+  };
+
+  const isStep2Complete = () => {
+    return form.images.length > 0 && !isUploading; // Ensure images are uploaded successfully and upload is complete
+  };
+
+  const isFormComplete = () => {
+    return isStep1Complete() && isStep2Complete();
   };
 
   // image upload with cloudinary
@@ -70,8 +91,6 @@ const CreateSpot = ({ onSpotCreated }) => {
       alert("Please select images to upload.");
       return;
     }
-
-    setSuccessMessage(""); // Clear previous success message
     setIsUploading(true);
     const uploadedUrls = [];
 
@@ -86,14 +105,13 @@ const CreateSpot = ({ onSpotCreated }) => {
       }
 
       setForm((prev) => ({ ...prev, images: uploadedUrls }));
-      setSuccessMessage("Images uploaded successfully!"); // Set new success message
 
       toast.success("Images uploaded successfully! 📸", {
         icon: false,
-        position: "top-right",
+        position: "bottom-right",
         autoClose: 3000,
         hideProgressBar: true, // Hides the progress bar
-        style: { backgroundColor: "white", color: "black" },
+        style: { backgroundColor: "#1C1C1C", color: "white" },
       });
     } catch (err) {
       console.error("Error uploading image:", err);
@@ -128,7 +146,6 @@ const CreateSpot = ({ onSpotCreated }) => {
     setFiles((prevFiles) =>
       prevFiles.filter((_, index) => index !== indexToRemove)
     );
-    setSuccessMessage(""); // Clear success message on delete
   };
 
   const handleSubmit = async () => {
@@ -158,10 +175,19 @@ const CreateSpot = ({ onSpotCreated }) => {
         // Success: Notify user and reset form
         toast.success("You've successfully created a new spot! 🎉", {
           icon: false,
-          position: "top-right",
+          position: "bottom-right",
           autoClose: 3000,
           hideProgressBar: true, // Hides the progress bar
           style: { backgroundColor: "#1C1C1C", color: "white" },
+        });
+
+        // Trigger confetti when spot is successfully created
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.8 },
+          colors: ["#FFA500", "#FF8C00", "#7F00FF", "#ADD8E6"],
+          shapes: ["circle"],
         });
 
         if (onSpotCreated) onSpotCreated(response.data.spot);
@@ -177,10 +203,7 @@ const CreateSpot = ({ onSpotCreated }) => {
           images: [],
         });
 
-        // Redirect to the spot's detail page after a short delay
-        setTimeout(() => {
-          navigate(`/spots/${response.data.spot._id}`);
-        }, 200);
+        navigate(`/spots/${response.data.spot._id}`);
       } catch (err) {
         console.error(
           "Error creating spot:",
@@ -207,18 +230,12 @@ const CreateSpot = ({ onSpotCreated }) => {
 
   return (
     <div className="page">
-
       <div size="xl" mt="xl" className="steps-container">
         <Title order={2} align="center" mb="xl">
           Insert your spot 🫶
         </Title>
 
-        <Stepper
-          active={active}
-          color="yellow"
-          onStepClick={setActive}
-          breakpoint="sm"
-        >
+        <Stepper active={active} color="yellow" breakpoint="sm">
           {/* Step 1: Information */}
           <Stepper.Step label="Information" description="Enter spot details">
             <TextInput
@@ -290,76 +307,64 @@ const CreateSpot = ({ onSpotCreated }) => {
             <div className="image-upload-section">
               {/* FileInput with a container */}
               <div className="file-input-container">
-                <FileInput
-                  label="Upload Images"
-                  placeholder="Select images"
-                  multiple
-                  value={files}
-                  onChange={setFiles}
-                  mt="md"
-                  mb="lg"
-                />
-              </div>
-
-              {/* Uploaded Images */}
-              {files.length > 0 && (
-                <div className="image-upload">
-                  {files.map((file, index) => (
-                    <div
-                      key={index}
-                      style={{
-                        width: "110px",
-                        height: "110px",
-                        position: "relative",
-                      }}
-                    >
-                      <img
-                        src={URL.createObjectURL(file)}
-                        alt={`preview-${index}`}
+                {/* Uploaded Images */}
+                {files.length > 0 && (
+                  <div className="image-upload">
+                    {files.map((file, index) => (
+                      <div
+                        key={index}
                         style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          overflow: "hidden",
-                          borderRadius: "8px",
-                          boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                          width: "110px",
+                          height: "110px",
+                          position: "relative",
                         }}
-                      />
-                      <ActionIcon
-                        onClick={() => handleDelete(index)}
-                        size="sm"
-                        className="delete-icon"
                       >
-                        <IconX stroke={2} color="black" size={15} />
-                      </ActionIcon>
-                    </div>
-                  ))}
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={`preview-${index}`}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            overflow: "hidden",
+                            borderRadius: "8px",
+                            boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                          }}
+                        />
+                        <ActionIcon
+                          onClick={() => handleDelete(index)}
+                          size="sm"
+                          className="delete-icon"
+                        >
+                          <IconX stroke={2} color="black" size={15} />
+                        </ActionIcon>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className="selectandupload">
+                  <FileInput
+                    className="fileinput"
+                    label="Select Images"
+                    placeholder="Select images"
+                    multiple
+                    value={files}
+                    onChange={setFiles}
+                    mt="md"
+                    mb="lg"
+                  />
+                  <Button
+                    onClick={handleUpload}
+                    disabled={!files.length || isUploading}
+                    loading={isUploading}
+                    mt="lg"
+                    ml="md"
+                    color="yellow"
+                  >
+                    Upload
+                  </Button>
                 </div>
-              )}
-
-              {/* Upload Button */}
-              <Button
-                onClick={handleUpload}
-                disabled={!files.length || isUploading}
-                loading={isUploading}
-                mt="lg"
-                fullWidth
-                color="grey"
-              >
-                Upload selected images
-              </Button>
-
-              {/* Display Success Message */}
-              {successMessage && (
-                <div
-                  style={{
-                    marginTop: "1em",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {successMessage}
-                </div>
-              )}
+              </div>
             </div>
           </Stepper.Step>
 
@@ -419,7 +424,12 @@ const CreateSpot = ({ onSpotCreated }) => {
             color="yellow"
             onClick={handleSubmit}
             loading={isSubmitting}
-            disabled={isSubmitting}
+            disabled={
+              (active === 0 && !isStep1Complete()) ||
+              (active === 1 && !isStep2Complete()) ||
+              (active === 2 && !isFormComplete()) ||
+              isSubmitting
+            }
           >
             {active === 2 ? "Save Spot" : "Next Step"}
           </Button>
