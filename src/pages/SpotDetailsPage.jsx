@@ -1,6 +1,6 @@
 // Imports: External Libraries
 import { useContext, useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { Button, List, Skeleton, Text, ThemeIcon, Title } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
@@ -190,13 +190,20 @@ function SpotDetailsPage() {
             About the Host
           </Title>
           <Text>
-            {spot.createdBy.firstName} {spot.createdBy.lastName}
+            Your host is {spot.createdBy.firstName}{" "}
+            {spot.createdBy.profile.linkedinUrl ? (
+              <Link to={spot.createdBy.profile.linkedinUrl}>
+                {spot.createdBy.lastName}
+              </Link>
+            ) : (
+              spot.createdBy.lastName
+            )}{" "}
+            from {spot.createdBy.profile.company}. <br />
+            Contact for more information via email to{" "}
+            <Link to={`mailto:${spot.createdBy.email}`}>
+              {spot.createdBy.email} 💌
+            </Link>
           </Text>
-          {spot.createdBy.company && (
-            <Text>
-              Company: <strong>{spot.createdBy.company}</strong>
-            </Text>
-          )}
         </div>
 
         <div className="date-selection-mobile">
