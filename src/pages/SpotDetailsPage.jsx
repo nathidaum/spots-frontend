@@ -2,10 +2,12 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { Button, List, Skeleton, Text, ThemeIcon, Title } from "@mantine/core";
+import { List, Skeleton, Text, ThemeIcon, Title } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { modals } from "@mantine/modals";
 import { IconCheck } from "@tabler/icons-react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // Imports: Internal Styles and Context
 import { AuthContext } from "../context/auth.context";
@@ -112,6 +114,13 @@ function SpotDetailsPage() {
       navigate(`/bookingconfirmation/${response.data.booking._id}`);
     } catch (error) {
       console.error("Error booking spot:", error.response?.data || error);
+
+      toast.warn("Please log in to pursue with the booking. 📆", {
+        position: "bottom-right",
+        autoClose: 3000,
+        icon: false,
+        style: { backgroundColor: "#1C1C1C", color: "white" },
+      });
     }
   };
 

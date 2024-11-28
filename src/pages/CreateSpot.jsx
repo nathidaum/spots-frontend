@@ -90,7 +90,7 @@ const CreateSpot = ({ onSpotCreated }) => {
 
       toast.success("Images uploaded successfully! 📸", {
         icon: false,
-        position: "bottom-right",
+        position: "top-right",
         autoClose: 3000,
         hideProgressBar: true, // Hides the progress bar
         style: { backgroundColor: "white", color: "black" },
@@ -99,10 +99,10 @@ const CreateSpot = ({ onSpotCreated }) => {
       console.error("Error uploading image:", err);
       toast.error("Image upload failed. Please try again. 🫠", {
         icon: false,
-        position: "bottom-right",
+        position: "top-right",
         autoClose: 3000,
         hideProgressBar: true, // Hides the progress bar
-        style: { backgroundColor: "white", color: "black" },
+        style: { backgroundColor: "#1C1C1C", color: "white" },
       });
     } finally {
       setIsUploading(false);
@@ -158,10 +158,10 @@ const CreateSpot = ({ onSpotCreated }) => {
         // Success: Notify user and reset form
         toast.success("You've successfully created a new spot! 🎉", {
           icon: false,
-          position: "bottom-right",
+          position: "top-right",
           autoClose: 3000,
           hideProgressBar: true, // Hides the progress bar
-          style: { backgroundColor: "orange", color: "white" },
+          style: { backgroundColor: "#1C1C1C", color: "white" },
         });
 
         if (onSpotCreated) onSpotCreated(response.data.spot);
@@ -191,10 +191,10 @@ const CreateSpot = ({ onSpotCreated }) => {
           "Oh no, there's error creating your spot. Please try again. 😪",
           {
             icon: false,
-            position: "bottom-right",
+            position: "top-right",
             autoClose: 3000,
             hideProgressBar: true, // Hides the progress bar
-            style: { backgroundColor: "orange", color: "white" },
+            style: { backgroundColor: "#1C1C1C", color: "white" },
           }
         );
       } finally {

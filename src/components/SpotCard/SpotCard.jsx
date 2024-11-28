@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ActionIcon, Badge, Box, Image, Notification } from "@mantine/core";
+import { ActionIcon, Badge, Image } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import "@mantine/carousel/styles.css";
 import {
@@ -8,14 +8,16 @@ import {
   IconHeart,
   IconHeartFilled,
 } from "@tabler/icons-react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import authService from "../../services/auth.service";
 import "./spotcard.css";
 
+
 const SpotCard = ({ spot, isFavorite, onFavoriteToggle }) => {
   // Inside SpotCard component
   const [liked, setLiked] = useState(isFavorite); // Initial favorite state
-  const [showNotification, setShowNotification] = useState(false);
 
   // Sync `liked` state with `isFavorite` prop
   useEffect(() => setLiked(isFavorite), [isFavorite]);
@@ -24,9 +26,13 @@ const SpotCard = ({ spot, isFavorite, onFavoriteToggle }) => {
     e.stopPropagation(); // Prevent navigation
 
     if (!localStorage.getItem("authToken")) {
-      console.warn("You must be logged in to favorite a spot.");
-      setShowNotification(true);
-      setTimeout(() => setShowNotification(false), 3000);
+      // Show toaster if user is not logged in
+      toast.warn("Happy you like it! Please log in to save it to your favs. 🔐", {
+        position: "top-right",
+        autoClose: 3000,
+        icon: false,
+        style: { backgroundColor: "#1C1C1C", color: "white" },
+      });
       return;
     }
 
@@ -82,19 +88,6 @@ const SpotCard = ({ spot, isFavorite, onFavoriteToggle }) => {
         </div>
       </Link>
 
-      {/* Render the notification */}
-      {showNotification && (
-        <Box mt="sm">
-          <Notification
-            color="yellow"
-            icon={<IconAlertCircle size={16} />}
-            onClose={() => setShowNotification(false)}
-            disallowClose
-          >
-            You must log in to save this spot to your favorites.
-          </Notification>
-        </Box>
-      )}
     </div>
   );
 };
