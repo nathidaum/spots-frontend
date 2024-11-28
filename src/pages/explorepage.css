@@ -16,6 +16,47 @@
   width: 100%;
 }
 
+.filter {
+  margin-bottom: 2em;
+  padding: 1em 2em 2em;
+  border-radius: 2em;
+  border: 1px solid rgb(252, 247, 239);
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2em; /* Add spacing between elements */
+  flex-wrap: nowrap; /* Allow wrapping on smaller screens */
+}
+
+.filter > * {
+  flex: 1; /* Makes each child take up equal width */
+  min-width: 150px; /* Optional: Set a minimum width for smaller screens */
+  height: 40px;
+}
+
+.filter-icon {
+  display: none;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between; 
+  align-items: baseline; 
+  width: 100%;
+}
+
+.filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-bottom: 2em;
+}
+.filter-pills .mantine-Badge-root {
+  cursor: pointer;
+}
+
 .spotslist {
   display: flex;
   flex-wrap: wrap;
@@ -102,5 +143,26 @@
     position: fixed;
     bottom: 80px;
     right: 20px;
+  }
+
+  .filter {
+    display: none;
+  }
+
+  .filter.mobile-visible {
+    padding-top: 2em; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+  }
+
+  .filter.mobile-visible > *{
+    width: 100%
+  }
+
+  .filter-icon {
+    display: inline-block;
   }
 }
