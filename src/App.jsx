@@ -1,4 +1,6 @@
 import { Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+
 import IsPrivate from "./components/IsPrivate";
 import ExplorePage from "./pages/ExplorePage";
 import SpotDetailsPage from "./pages/SpotDetailsPage";
@@ -18,6 +20,16 @@ function App() {
   return (
     <div>
       <Navbar />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={true}
+        newestOnTop={true}
+        closeOnClick
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<ExplorePage />} />

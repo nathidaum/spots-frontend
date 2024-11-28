@@ -9,15 +9,15 @@ import {
   Textarea,
   MultiSelect,
   NumberInput,
-  Container,
   Badge,
   Title,
   FileInput,
   ActionIcon,
 } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
-import { DatePickerInput } from "@mantine/dates";
 import { IconX } from "@tabler/icons-react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import "./createspot.css";
 import "../components/SpotCard/spotcard.css";
@@ -59,13 +59,6 @@ const CreateSpot = ({ onSpotCreated }) => {
     setForm({ ...form, location: { ...form.location, [field]: value } });
   };
 
-  const handleAvailabilityChange = (field, value) => {
-    setForm((prev) => ({
-      ...prev,
-      availability: { ...prev.availability, [field]: value },
-    }));
-  };
-
   // image upload with cloudinary
 
   const CLOUDINARY_URL = import.meta.env.VITE_CLOUDINARY_URL;
@@ -94,9 +87,23 @@ const CreateSpot = ({ onSpotCreated }) => {
 
       setForm((prev) => ({ ...prev, images: uploadedUrls }));
       setSuccessMessage("Images uploaded successfully!"); // Set new success message
+
+      toast.success("Images uploaded successfully! 📸", {
+        icon: false,
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: true, // Hides the progress bar
+        style: { backgroundColor: "white", color: "black" },
+      });
     } catch (err) {
       console.error("Error uploading image:", err);
-      alert("Image upload failed. Please try again.");
+      toast.error("Image upload failed. Please try again. 🫠", {
+        icon: false,
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: true, // Hides the progress bar
+        style: { backgroundColor: "white", color: "black" },
+      });
     } finally {
       setIsUploading(false);
     }
@@ -148,6 +155,15 @@ const CreateSpot = ({ onSpotCreated }) => {
           }
         );
 
+        // Success: Notify user and reset form
+        toast.success("You've successfully created a new spot! 🎉", {
+          icon: false,
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: true, // Hides the progress bar
+          style: { backgroundColor: "orange", color: "white" },
+        });
+
         if (onSpotCreated) onSpotCreated(response.data.spot);
 
         setForm({
@@ -161,11 +177,25 @@ const CreateSpot = ({ onSpotCreated }) => {
           images: [],
         });
 
-        navigate("/");
+        // Redirect to the spot's detail page after a short delay
+        setTimeout(() => {
+          navigate(`/spots/${response.data.spot._id}`);
+        }, 200);
       } catch (err) {
         console.error(
           "Error creating spot:",
           err.response?.data || err.message
+        );
+        // Error: Notify user
+        toast.error(
+          "Oh no, there's error creating your spot. Please try again. 😪",
+          {
+            icon: false,
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: true, // Hides the progress bar
+            style: { backgroundColor: "orange", color: "white" },
+          }
         );
       } finally {
         setIsSubmitting(false);
@@ -177,6 +207,7 @@ const CreateSpot = ({ onSpotCreated }) => {
 
   return (
     <div className="page">
+
       <div size="xl" mt="xl" className="steps-container">
         <Title order={2} align="center" mb="xl">
           Insert your spot 🫶
