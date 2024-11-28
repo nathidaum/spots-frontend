@@ -69,13 +69,6 @@ const Navbar = () => {
                   </div>
                 </Menu.Target>
                 <Menu.Dropdown>
-                  <Menu.Item
-                    component={Link}
-                    to="/profile/edit"
-                    icon={<IconSettings />}
-                  >
-                    Settings
-                  </Menu.Item>
                   <Menu.Item icon={<IconLogout />} onClick={logOutUser}>
                     Logout
                   </Menu.Item>
