@@ -52,7 +52,7 @@ function BookingConfirmation() {
 
   return (
     <div className="bookingconfirmationpage">
-      <Title order={1} mb="xl">Booking confirmed! 🎉</Title>
+      <Title order={1} mb="xl" className="bookingconfirmed">Booking confirmed! 🎉</Title>
       <BookingCard booking={booking} />
     </div>
   );
