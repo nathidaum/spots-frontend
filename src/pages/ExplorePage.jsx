@@ -164,7 +164,7 @@ function ExplorePage() {
           <Slider
             value={maxPriceFilter || 100} // Default to 0 if null
             onChange={setMaxPriceFilter}
-            min={1}
+            min={0}
             max={400}
             step={10}
             label={(value) => `${value}€`}
