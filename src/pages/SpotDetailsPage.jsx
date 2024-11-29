@@ -156,7 +156,8 @@ function SpotDetailsPage() {
     return (
       <div className="skeleton-detailed-page">
         <Skeleton height={260} />
-        <Skeleton height={40} mt="md" radius="sm" />
+        <Skeleton height={40} width={60} mt="md" radius="sm" />
+        <Skeleton height={80} width={40} mt="md" radius="sm" />
       </div>
     );
   }
