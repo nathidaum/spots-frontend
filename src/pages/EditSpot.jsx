@@ -15,11 +15,12 @@ import {
   ActionIcon,
 } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
-import { IconTrash } from "@tabler/icons-react";
+import { IconX } from "@tabler/icons-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import "./editspot.css";
+import "./createspot.css";
 import "../components/SpotCard/spotcard.css";
 
 const amenitiesOptions = [
@@ -271,10 +272,10 @@ const EditSpot = () => {
                 />
                 <ActionIcon
                   onClick={() => handleDelete(index)}
-                  style={{ position: "absolute", top: 10, right: 10 }}
-                  className="heart-icon"
+                  size="sm"
+                          className="delete-icon"
                 >
-                  <IconTrash color="orange" />
+                  <IconX stroke={2} color="black" size={15} />
                 </ActionIcon>
               </Carousel.Slide>
             ))}
